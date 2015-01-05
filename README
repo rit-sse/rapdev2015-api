@@ -1,0 +1,13 @@
+mysql setup:
+
+Log into mysql with root, type:
+
+CREATE USER 'rapdev'@'localhost';
+CREATE DATABASE Main;
+GRANT ALL ON Main.* to 'rapdev'@'localhost';
+
+
+Then in your terminal window (assuming you're using *nix, if you're on Windows, good luck :p ):
+
+mysql -u rapdev < rapdev2015.sql
+
