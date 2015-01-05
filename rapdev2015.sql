@@ -30,12 +30,12 @@ CREATE  TABLE IF NOT EXISTS `Main`.`Event` (
   `user_id` INT UNSIGNED NOT NULL ,
   `name` VARCHAR(256) NOT NULL ,
   `description` VARCHAR(5000) NOT NULL ,
-  `start_time` DATETIME(0) NOT NULL ,
-  `end_time` DATETIME(0) NOT NULL ,
+  `start_time` TIMESTAMP DEFAULT NOW() NOT NULL ,
+  `end_time` TIMESTAMP DEFAULT '1970-01-01 00:00:01' NOT NULL ,
   `email_remind` TINYINT(1) NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `id_idx` (`user_id` ASC) ,
-  CONSTRAINT `id`
+  CONSTRAINT `fk_user_id`
     FOREIGN KEY (`user_id` )
     REFERENCES `Main`.`User` (`id` )
     ON DELETE NO ACTION
@@ -56,12 +56,12 @@ CREATE  TABLE IF NOT EXISTS `Main`.`Share_Event` (
   PRIMARY KEY (`id`) ,
   INDEX `id_idx` (`event_id` ASC) ,
   INDEX `id_idx1` (`invited_id` ASC) ,
-  CONSTRAINT `id`
+  CONSTRAINT `fk_event_id`
     FOREIGN KEY (`event_id` )
     REFERENCES `Main`.`Event` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `id`
+  CONSTRAINT `fk_invited_id`
     FOREIGN KEY (`invited_id` )
     REFERENCES `Main`.`User` (`id` )
     ON DELETE NO ACTION
@@ -81,7 +81,7 @@ CREATE  TABLE IF NOT EXISTS `Main`.`Tag` (
   `color` VARCHAR(6) NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `id_idx` (`user_id` ASC) ,
-  CONSTRAINT `id`
+  CONSTRAINT `fk_tag_user_id`
     FOREIGN KEY (`user_id` )
     REFERENCES `Main`.`User` (`id` )
     ON DELETE NO ACTION
@@ -101,12 +101,12 @@ CREATE  TABLE IF NOT EXISTS `Main`.`Event_Tag` (
   PRIMARY KEY (`id`) ,
   INDEX `id_idx` (`event_id` ASC) ,
   INDEX `id_idx1` (`tag_id` ASC) ,
-  CONSTRAINT `id`
+  CONSTRAINT `fk_event_tag_event_id`
     FOREIGN KEY (`event_id` )
     REFERENCES `Main`.`Event` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `id`
+  CONSTRAINT `fk_event_tag_tag_id`
     FOREIGN KEY (`tag_id` )
     REFERENCES `Main`.`Tag` (`id` )
     ON DELETE NO ACTION
@@ -123,13 +123,13 @@ CREATE  TABLE IF NOT EXISTS `Main`.`Todo` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
   `user_id` INT UNSIGNED NOT NULL ,
   `name` VARCHAR(256) NOT NULL ,
-  `remind_time` DATETIME(0) NOT NULL ,
+  `remind_time` TIMESTAMP DEFAULT NOW() NOT NULL ,
   `completed` TINYINT(1) NOT NULL ,
   `email_remind` TINYINT(1) NOT NULL ,
   `lapse_time` INT UNSIGNED NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `id_idx` (`user_id` ASC) ,
-  CONSTRAINT `id`
+  CONSTRAINT `fk_main_user_id`
     FOREIGN KEY (`user_id` )
     REFERENCES `Main`.`User` (`id` )
     ON DELETE NO ACTION
@@ -149,12 +149,12 @@ CREATE  TABLE IF NOT EXISTS `Main`.`Todo_Tag` (
   PRIMARY KEY (`id`) ,
   INDEX `id_idx` (`tag_id` ASC) ,
   INDEX `id_idx1` (`todo_id` ASC) ,
-  CONSTRAINT `id`
+  CONSTRAINT `fk_todo_tag_tag_id`
     FOREIGN KEY (`tag_id` )
     REFERENCES `Main`.`Tag` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `id`
+  CONSTRAINT `fk_todo_tag_todo_id`
     FOREIGN KEY (`todo_id` )
     REFERENCES `Main`.`Todo` (`id` )
     ON DELETE NO ACTION
@@ -176,7 +176,7 @@ CREATE  TABLE IF NOT EXISTS `Main`.`Subtask` (
   `lapse_time` INT UNSIGNED NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `id_idx` (`parent_id` ASC) ,
-  CONSTRAINT `id`
+  CONSTRAINT `fk_subtask_parent_id`
     FOREIGN KEY (`parent_id` )
     REFERENCES `Main`.`Todo` (`id` )
     ON DELETE NO ACTION
