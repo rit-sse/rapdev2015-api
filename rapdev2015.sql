@@ -14,7 +14,8 @@ DROP TABLE IF EXISTS `Main`.`User` ;
 CREATE  TABLE IF NOT EXISTS `Main`.`User` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
   `username` VARCHAR(64) NOT NULL ,
-  `password` VARCHAR(65) NOT NULL ,
+  `password` VARCHAR(97) NOT NULL ,
+  `salt` VARCHAR(32) NOT NULL ,
   `email` VARCHAR(500) NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
