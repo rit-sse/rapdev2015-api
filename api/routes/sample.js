@@ -12,4 +12,6 @@ router.route('/')
   .get(function(req, res, next){})
   .post(function(req, res, next){});
 
-module.exports = router;
+module.exports = function(app) {
+  app.use('/api', router);
+}

@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 var favicon = require('serve-favicon');
 
-var sample = require('./routes/sample');
+var routes = require('./routes');
 
 var app = express();
 
@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 
-app.use('/api/', sample);
+routes(app);
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
