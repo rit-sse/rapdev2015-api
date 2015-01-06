@@ -74,16 +74,21 @@ CREATE  TABLE IF NOT EXISTS `Main`.`Calendar_Item` (
   `email_reminder` TINYINT(1) NULL ,
   `event` INT UNSIGNED NOT NULL ,
   `invited_by_id` INT UNSIGNED NOT NULL ,
-  `accepted` TINYINT(1) NULL ,
+  `accepted` TINYINT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `item_owner_id_idx` (`item_owner_id` ASC) ,
-  INDEX `item_event_id_idx` (`invited_by_id` ASC) ,
+  INDEX `item_event_id_idx` (`event` ASC) ,
   CONSTRAINT `item_owner_id`
     FOREIGN KEY (`item_owner_id` )
     REFERENCES `Main`.`User` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `item_event_id`
+    FOREIGN KEY (`event` )
+    REFERENCES `Main`.`Event` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `item_shared_by_id`
     FOREIGN KEY (`invited_by_id` )
     REFERENCES `Main`.`User` (`id` )
     ON DELETE NO ACTION
