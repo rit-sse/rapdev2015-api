@@ -1,6 +1,4 @@
-"use strict";
-
-var Sequelize = require('sequelize')
+'use strict';
 
 module.exports = function(sequelize, DataTypes){
   var User = sequelize.define('User', {
@@ -10,9 +8,8 @@ module.exports = function(sequelize, DataTypes){
       validate: {
         isEmail: true,
         isUnique: function(value){
-            if( User.find({where:{email: value}}) ){
-              throw new Error('Duplicate email')
-            }
+          if( User.find({where:{email: value}}) ){
+            throw new Error('Duplicate email')
           }
         }
       }
