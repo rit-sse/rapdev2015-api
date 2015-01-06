@@ -4,9 +4,6 @@ var Sequelize = require('sequelize')
 
 module.exports = function(sequelize, DataTypes){
   var User = sequelize.define('User', {
-    username: {
-      type: DataTypes.STRING(64),
-      allowNull: false},
     email: {
       type: DataTypes.STRING(500),
       allowNull: false,
@@ -19,7 +16,8 @@ module.exports = function(sequelize, DataTypes){
           }
         }
       }
-    }, {
+    }
+  }, {
     classMethods: {
       associate : function(models) {
         User.hasMany(models.CalendarItem, { as: 'ItemOwner'});

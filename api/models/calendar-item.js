@@ -2,8 +2,12 @@
 
 module.exports = function(sequelize, DataTypes) {
   var calendarItem = sequelize.define('CalendarItem', {
-    emailReminder: {type: DataTypes.BOOLEAN},
-    accepted: {type: DataTypes.ENUM('ACCEPTED', 'PENDING', 'DECLINED')}
+    emailReminder: {
+      type: DataTypes.BOOLEAN
+    },
+    accepted: {
+      type: DataTypes.ENUM('ACCEPTED', 'PENDING', 'DECLINED')
+    }
   }, {
     classMethods: {
       associate: function(models) {
