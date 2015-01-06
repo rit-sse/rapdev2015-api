@@ -1,13 +1,14 @@
-mysql setup:
+RAPDEV2015 API
+===============
 
-Log into mysql with root, type:
+## Prerequisites
 
-CREATE USER 'rapdev'@'localhost';
-CREATE DATABASE Main;
-GRANT ALL ON Main.* to 'rapdev'@'localhost';
+* node
+* npm
 
+## Setup
 
-Then in your terminal window (assuming you're using *nix, if you're on Windows, good luck :p ):
-
-mysql -u rapdev < rapdev2015.sql
+  cd api
+  npm install
+  npm start
 
