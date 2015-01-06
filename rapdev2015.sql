@@ -129,11 +129,18 @@ CREATE  TABLE IF NOT EXISTS `Main`.`Todo` (
   `completed` TINYINT(1) NOT NULL ,
   `email_remind` TINYINT(1) NOT NULL ,
   `lapse_time` INT UNSIGNED NOT NULL ,
+  `parent` INT UNSIGNED NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `id_idx` (`user_id` ASC) ,
+  INDEX `todo_parent_id_idx` (`parent` ASC) ,
   CONSTRAINT `todo_user_id`
     FOREIGN KEY (`user_id` )
     REFERENCES `Main`.`User` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `todo_parent_id`
+    FOREIGN KEY (`parent` )
+    REFERENCES `Main`.`Todo` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -158,28 +165,6 @@ CREATE  TABLE IF NOT EXISTS `Main`.`Todo_Tag` (
     ON UPDATE NO ACTION,
   CONSTRAINT `todo_tag_todo_id`
     FOREIGN KEY (`todo_id` )
-    REFERENCES `Main`.`Todo` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `Main`.`Subtask`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Main`.`Subtask` ;
-
-CREATE  TABLE IF NOT EXISTS `Main`.`Subtask` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
-  `parent_id` INT UNSIGNED NOT NULL ,
-  `name` VARCHAR(256) NOT NULL ,
-  `completed` TINYINT(1) NOT NULL ,
-  `email_remind` TINYINT(1) NOT NULL ,
-  `lapse_time` INT UNSIGNED NOT NULL ,
-  PRIMARY KEY (`id`) ,
-  INDEX `id_idx` (`parent_id` ASC) ,
-  CONSTRAINT `subtask_parent_id`
-    FOREIGN KEY (`parent_id` )
     REFERENCES `Main`.`Todo` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
