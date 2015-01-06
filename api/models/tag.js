@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = function(sequelize, DataTypes){
-  var Tag = ('Tag', { 
+  var Tag = sequelize.define('Tag', {
     name: {
       type: DataTypes.STRING(32),
       allowNull: false
@@ -20,6 +20,6 @@ module.exports = function(sequelize, DataTypes){
       }
     }
   });
-  
+
   return Tag;
 }

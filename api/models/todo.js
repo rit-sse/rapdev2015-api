@@ -27,7 +27,7 @@ module.exports = function (sequelize, DataTypes) {
     classMethods: {
       associate: function (models) {
         Todo.belongsTo(models.User);
-        Todo.belongsTo(models.Todo.id, {as: 'parent'});
+        Todo.belongsTo(models.Todo, {as: 'parent'});
         Todo.hasMany(models.Tag);
       },
 

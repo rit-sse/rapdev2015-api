@@ -16,10 +16,11 @@ module.exports = function(sequelize, DataTypes){
     }, {
     classMethods: {
       associate : function(models) {
-        User.hasMany(model.CalendarItem);
-        User.hasMany(model.Todo);
-        User.hasMany(model.Tag);
-        User.hasMany(model.Event);
+        User.hasMany(models.CalendarItem, { as: 'ItemOwner'});
+        User.hasMany(models.CalendarItem, { as: 'InvitedBy'});
+        User.hasMany(models.Todo),
+        User.hasMany(models.Tag),
+        User.hasMany(models.Event, { as: 'owner' })
       }
     }
   });
