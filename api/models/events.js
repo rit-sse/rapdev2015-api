@@ -2,7 +2,13 @@
 
 module.exports = function(sequelize, DataTypes) {
   var Event = sequelize.define('Event', {
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
     description: DataTypes.TEXT,
     startTime: DataTypes.DATE,
     endTime: DataTypes.DATE,
@@ -13,6 +19,13 @@ module.exports = function(sequelize, DataTypes) {
         Event.belongsTo(models.User, { foreignKey: 'ownerId' });
         Event.belongsToMany(models.Tag);
         Event.hasMany(models.CalendarItem);
+      }
+    },
+    validate: {
+      startTimeBeforeEndTime: function() {
+        if(this.startTime > this.endTime) {
+          throw new Error('Start time needs to be before end time');
+        }
       }
     }
   });
