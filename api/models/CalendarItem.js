@@ -11,8 +11,8 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         calendarItem.itemOwnerid.hasOne(models.Users.id)
-	calendarItem.event.hasOne(models.Event.id)
-	calendarItem.invitedByid.hasOne(models.Users.id)
+        calendarItem.event.hasOne(models.Event.id)
+        calendarItem.invitedByid.hasOne(models.Users.id)
       }
   });
 
