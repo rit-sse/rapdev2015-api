@@ -19,6 +19,13 @@ router
 
     });
 
+router
+  .route('/users')
+    .get(function(req, res, next){
+
+    });
+
+
 module.exports = function(app) {
   app.use('/api', router);
 }

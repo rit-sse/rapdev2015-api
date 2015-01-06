@@ -43,6 +43,18 @@ router
 
     });
 
+router
+  .route('/:id/tags')
+    .get(function(req, res, next) {
+
+    })
+    .put(function(req, res, next) {
+
+    })
+    .delete(function(req, res, next) {
+
+    });
+
 module.exports = function(app) {
   app.use('/api/todo', router);
 }
