@@ -5,8 +5,6 @@ module.exports = function(sequelize, DataTypes){
     classMethods: {
       associate: function(models) {
         TodoTag.hasOne(models.Todo)
-      },
-      associate: function(models) {
         TodoTag.hasOne(models.Tag)
       }
     }
