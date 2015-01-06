@@ -11,7 +11,13 @@ module.exports = function(sequelize, DataTypes){
       type: DataTypes.STRING(500),
       allowNull: false,
       validate: {
-        isEmail: true}
+        isEmail: true,
+        isUnique: function(value){
+            if( User.find({where:{email: value}}) ){
+              throw new Error('Duplicate email')
+            }
+          }
+        }
       }
     }, {
     classMethods: {
