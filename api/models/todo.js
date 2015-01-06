@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
 module.exports = function (sequelize, DataTypes) {
-  var Todo = sequelize.define("Todo", {
+  var Todo = sequelize.define('Todo', {
     name: {
       type: DataTypes.STRING,
       allowNull: false
