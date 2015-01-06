@@ -12,9 +12,9 @@ module.exports = function(sequelize, DataTypes){
   }, {
     classMethods: {
       associate: function(models) {
-        Tag.belongsTo(models.User)
-        Tag.belongsToMany(model.Event)
-        Tag.belongsToMany(model.Todo)
+        Tag.belongsTo(models.User);
+        Tag.belongsToMany(model.Event);
+        Tag.belongsToMany(model.Todo);
       }
     }
   });
