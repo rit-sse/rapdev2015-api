@@ -10,9 +10,9 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        calendarItem.itemOwnerid.hasOne(models.Users.id)
+        calendarItem.itemOwnerid.hasOne(models.User.id)
         calendarItem.event.hasOne(models.Event.id)
-        calendarItem.invitedByid.hasOne(models.Users.id)
+        calendarItem.invitedByid.hasOne(models.User.id)
       }
   });
 
