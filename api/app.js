@@ -5,8 +5,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 var favicon = require('serve-favicon');
-
+var orm = require('orm');
+var path = require('path');
 var routes = require('./routes');
+var models = require('./models');
 
 var app = express();
 
@@ -15,6 +17,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+
+app.use(orm.express('sqlite://' + __dirname + '/db/development.sqlite' , {
+  define: function (db, m) {
+    models(db, m);
+    db.sync();
+  }
+}));
 
 routes(app);
 

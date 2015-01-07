@@ -1,28 +1,22 @@
 'use strict';
 
-module.exports = function(sequelize, DataTypes){
-  var User = sequelize.define('User', {
-    email: {
-      type: DataTypes.STRING(500),
-      allowNull: false,
-      validate: {
-        isEmail: true,
-        isUnique: function(value){
-          if( User.find({where:{email: value}}) ){
-            throw new Error('Duplicate email')
-          }
-        }
-      }
+var orm = require('orm');
+
+module.exports = function(db, models) {
+  var User = db.define('users', {
+    email: String
   }, {
-    classMethods: {
-      associate : function(models) {
-        User.hasMany(models.CalendarItem, { as: 'ItemOwner'});
-        User.hasMany(models.CalendarItem, { as: 'InvitedBy'});
-        User.hasMany(models.Todo),
-        User.hasMany(models.Tag),
-        User.hasMany(models.Event, { as: 'owner' })
-      }
+    validate: {
+      email: [
+        orm.validators.required(),
+        orm.validators.unique(),
+        orm.validators.notEmptyString(),
+        orm.validators.patterns.email()
+      ]
     }
   });
-  return User;
-};
+
+  User.associate = function(models) { }
+
+  models.user = User;
+}

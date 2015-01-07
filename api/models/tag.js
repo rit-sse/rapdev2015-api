@@ -1,25 +1,30 @@
 'use strict';
 
-module.exports = function(sequelize, DataTypes){
-  var Tag = sequelize.define('Tag', {
-    name: {
-      type: DataTypes.STRING(32),
-      allowNull: false
-    },
-    color: {
-      type: DataTypes.STRING(6),
-      allowNull: false
-    }
-  },
-  {
-    classMethods: {
-      associate: function(models) {
-        Tag.belongsTo(models.User);
-        Tag.belongsToMany(models.Event);
-        Tag.belongsToMany(models.Todo);
-      }
+var orm = require('orm');
+
+module.exports = function(db, models) {
+  var Tag = db.define('tags', {
+    name: String,
+    color: String
+  }, {
+    validations: {
+      name: [
+        orm.validators.required(),
+        orm.validators.notEmptyString()
+      ],
+      color: [
+        orm.validators.required(),
+        orm.validators.notEmptyString(),
+        orm.validators.patterns.hexString()
+      ]
     }
   });
 
-  return Tag;
+  Tag.associate = function(models) {
+    Tag.hasOne('user', models.user, { reverse: 'tags' });
+    Tag.hasMany('events', models.event, {}, { reverse: 'tags' });
+    Tag.hasMany('todos', models.todo, {}, { reverse: 'tags' });
+  }
+
+  models.tag = Tag;
 }

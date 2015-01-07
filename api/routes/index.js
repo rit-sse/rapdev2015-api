@@ -1,9 +1,12 @@
 var fs = require('fs');
 
-module.exports = function(app){
-  fs.readdirSync(__dirname).forEach(function(file) {
-    if (file == "index.js") return;
-  	var name = file.substr(0, file.indexOf('.'));
-    require('./' + name)(app);
-  });
+module.exports = function(app) {
+  fs
+    .readdirSync(__dirname)
+    .filter(function(file) {
+      return (file.indexOf('.') !== 0) && (file !== 'index.js');
+    })
+    .forEach(function(file) {
+      require('./' + file)(app);
+    });
 }

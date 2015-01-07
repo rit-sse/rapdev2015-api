@@ -1,37 +1,32 @@
 'use strict';
 
-module.exports = function (sequelize, DataTypes) {
-  var Todo = sequelize.define('Todo', {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    remind_time: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
-    },
-    completed: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
-    },
-    email_remind: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
-    },
-    lapse_time: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
-    }
-  },
-  {
-    classMethods: {
-      associate: function (models) {
-        Todo.belongsTo(models.User);
-        Todo.belongsTo(models.Todo, {as: 'parent'});
-        Todo.hasMany(models.Tag);
-      },
+var orm = require('orm');
 
+module.exports = function(db, models) {
+  var Todo = db.define('todos', {
+    name: String,
+    remindTime: Date,
+    dueDate: Date,
+    completed: Boolean,
+    emailReminder: Boolean,
+    lapseTime: {
+      type: 'number',
+      unsigned: true
+    }
+  }, {
+    validations: {
+      name: orm.validators.required(),
+      remindTime: orm.validators.required(),
+      completed: orm.validators.required(),
+      emailRemind: orm.validators.required(),
+      lapseTime: orm.validators.required()
     }
   });
-  return Todo;
+
+  Todo.associate = function(models) {
+    Todo.hasOne('user', models.user, { reverse: 'todos' })
+    Todo.hasOne('parent', Todo, {reverse: 'subtasks'});
+  }
+
+  models.todo = Todo;
 }
