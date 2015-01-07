@@ -55,6 +55,18 @@ router
 
     });
 
+router
+  .route('/:id/reminders')
+    .get(function(req, res, next) {
+
+    })
+    .post(function(req, res, next) {
+
+    })
+    .delete(function(req, res, next) {
+
+    });
+
 module.exports = function(app) {
   app.use('/api/todo', router);
 }

@@ -3,25 +3,25 @@ var router = express.Router();
 
 router
   .route('/login')
-    .post(function(req, res, next){
+    .post(function(req, res, next) {
 
     });
 
 router
   .route('/register')
-    .post(function(req, res, next){
+    .post(function(req, res, next) {
 
     });
 
 router
   .route('/logout')
-    .post(function(req, res, next){
+    .post(function(req, res, next) {
 
     });
 
 router
   .route('/users')
-    .get(function(req, res, next){
+    .get(function(req, res, next) {
 
     });
 

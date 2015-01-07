@@ -3,13 +3,13 @@ var router = express.Router();
 
 router
   .route('/:id/accept')
-    .post(function(req, res, next){
+    .post(function(req, res, next) {
 
     });
 
 router
   .route('/:id/decline')
-    .post(function(req, res, next){
+    .post(function(req, res, next) {
 
     });
 
