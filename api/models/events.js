@@ -2,14 +2,14 @@
 
 var orm = require("orm");
 
-module.exports = function(db, models) {
-  var startTimeBeforeEndTime = function(v, next) {
-    if(v < this.endTime) {
-      return next();
-    }
-    return next('start-time-after-end-time');
+function startTimeBeforeEndTime(v, next) {
+  if(v < this.endTime) {
+    return next();
   }
+  return next('start-time-after-end-time');
+}
 
+module.exports = function(db, models) {
   var Event = db.define('events', {
     name: String,
     description: String,
