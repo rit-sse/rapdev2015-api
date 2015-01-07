@@ -3,6 +3,13 @@
 var orm = require("orm");
 
 module.exports = function(db, models) {
+  var startTimeBeforeEndTime = function(v, next) {
+    if(v < this.endTime) {
+      return next();
+    }
+    return next('start-time-after-end-time');
+  }
+
   var Event = db.define('events', {
     name: String,
     description: String,
@@ -12,7 +19,8 @@ module.exports = function(db, models) {
     validations: {
       name: [
         orm.validators.required(),
-        orm.validators.notEmptyString()
+        orm.validators.notEmptyString(),
+        startTimeBeforeEndTime
       ]
     }
   });

@@ -2,7 +2,6 @@
 
 module.exports = function(db, models) {
   var CalendarItem = db.define('calendar_items', {
-    emailReminder: Boolean,
     accepted: ['Accepted', 'Pending', 'Declined']
   });
 
@@ -13,5 +12,5 @@ module.exports = function(db, models) {
   }
 
   models.calendarItem = CalendarItem;
-};
+}
 

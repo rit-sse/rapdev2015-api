@@ -5,10 +5,8 @@ var orm = require('orm');
 module.exports = function(db, models) {
   var Todo = db.define('todos', {
     name: String,
-    remindTime: Date,
     dueDate: Date,
     completed: Boolean,
-    emailReminder: Boolean,
     lapseTime: {
       type: 'number',
       unsigned: true
