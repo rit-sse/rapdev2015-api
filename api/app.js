@@ -22,7 +22,7 @@ app.use(cookieParser());
 
 app.use(orm.express(ormOpts, {
   define: function (db, m) {
-    models(db, m);
+    models.load(db, m);
     db.sync();
   }
 }));

@@ -1,6 +1,7 @@
 var fs = require('fs');
-
-module.exports = function(db, models) {
+var definedModels;
+module.exports.load = function(db, models) {
+  definedModels = models;
   fs
     .readdirSync(__dirname)
     .filter(function(file) {
@@ -16,4 +17,8 @@ module.exports = function(db, models) {
     }
   });
 
+}
+
+module.exports.model = function(name) {
+  return definedModels[name]
 }
