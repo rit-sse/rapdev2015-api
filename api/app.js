@@ -6,7 +6,9 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 var favicon = require('serve-favicon');
 var orm = require('orm');
-var path = require('path');
+var env = process.env.NODE_ENV || "development";
+var ormOpts = require('./config/orm.json')[env];
+
 var routes = require('./routes');
 var models = require('./models');
 
@@ -18,7 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 
-app.use(orm.express('sqlite://' + __dirname + '/db/development.sqlite' , {
+app.use(orm.express(ormOpts, {
   define: function (db, m) {
     models(db, m);
     db.sync();

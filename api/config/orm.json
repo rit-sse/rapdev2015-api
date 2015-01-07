@@ -1,0 +1,5 @@
+{
+  "development": "sqlite://db/development.sqlite",
+  "production": "sqlite://db/production.sqlite",
+  "test": "sqlite://db/test.sqlite"
+}
