@@ -8,8 +8,7 @@ var fbAppId = 1654582774769215;
 var fbAppSecret = 'b35b4d0bc7e91f472895900a40879851';
 
 module.exports = function(app, secret) {
-    var router = express.Router();
-  app.use('/token', router);
+  var router = express.Router();
 
   router.route('/').get(function getToken(req, res, next){
     var provider = req.provider;
@@ -31,7 +30,9 @@ module.exports = function(app, secret) {
         });
       }
     }
-  });    
+  });
+  
+  app.use('/token', router);
 
   return router;
 };

@@ -3,8 +3,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
-var favicon = require('serve-favicon');
 var orm = require('orm');
+var cors = require('cors');
 var env = process.env.NODE_ENV || 'development';
 var ormOpts = require('./config/orm.json')[env];
 
@@ -17,8 +17,8 @@ var secret = 'SUPAH SEKRIT SECRET';
 
 var app = express();
 
+app.use(cors());
 app.use(jwt({secret: secret}).unless('/token'));
-app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
