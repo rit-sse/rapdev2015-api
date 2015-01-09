@@ -4,19 +4,13 @@ var orm = require('orm');
 
 module.exports = function(db, models) {
   var User = db.define('users', {
-    email: String
+    trash: String
   }, {
-    validate: {
-      email: [
-        orm.validators.required(),
-        orm.validators.unique(),
-        orm.validators.notEmptyString(),
-        orm.validators.patterns.email()
-      ]
-    }
   });
 
-  User.associate = function(models) { }
+  User.associate = function(models) {
+    User.hasMany('facebook', models.facebook, {}, { reverse: 'users'});
+ }
 
   models.user = User;
 }
