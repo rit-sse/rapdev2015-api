@@ -8,7 +8,7 @@ function getAllTodosOfUser(userId,db,callback){
   });
 }
 
-function makeNewTodo(name,remind_time,email_remind,db,callback){
+function createNewTodo(name,remind_time,email_remind,db,callback){
   var newTodo = {};
   newTodo.name = name;
   newTodo.remind_time = remind_time;
@@ -31,6 +31,7 @@ function editTodoById(todoId,todo,db,callback){
     result[0].completed = todo.completed;
     result[0].email_remind = todo.email_remind;
     result[0].lapse_time = todo.lapse_time;
+    result[0].parent = todo.parent;
     result[0].save(function(err){
         callback(err);
     });
@@ -42,5 +43,22 @@ function removeTodoById(todoId,db,callback){
     result[0].remove(function(err){
         callback(err);
     });
+  });
+}
+
+function getChildrenOfTaskById(todoId,db,callback){
+  db.models.Todo.find({parent:todoId},function(err,results){
+    callback(err,result);
+  });
+}
+
+function createNewChildTodo(parent,name,remind_time,email_remind,db,callback){
+  var newTodo = {};
+  newTodo.name = name;
+  newTodo.remind_time = remind_time;
+  newTodo.email_remind = email_remind;
+  newTodo.parent = parent.id;
+  db.models.Todo.create(newTodo,function(err,result){
+    callback(err,result);
   });
 }
