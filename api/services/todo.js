@@ -26,13 +26,13 @@ function getTodoById(todoId,db,callback){
 
 function editTodoById(todoId,todo,db,callback){
   db.models.Todo.get(todoId, funtion(err,result){
-    result[0].name = todo.name;
-    result[0].remind_time = todo.remind_time;
-    result[0].completed = todo.completed;
-    result[0].email_remind = todo.email_remind;
-    result[0].lapse_time = todo.lapse_time;
-    result[0].parent = todo.parent;
-    result[0].save(function(err){
+    result.name = todo.name;
+    result.remind_time = todo.remind_time;
+    result.completed = todo.completed;
+    result.email_remind = todo.email_remind;
+    result.lapse_time = todo.lapse_time;
+    result.parent = todo.parent;
+    result.save(function(err){
         callback(err);
     });
   });
@@ -40,7 +40,7 @@ function editTodoById(todoId,todo,db,callback){
 
 function removeTodoById(todoId,db,callback){
   db.models.Todo.get(todoId, funtion(err,result){
-    result[0].remove(function(err){
+    result.remove(function(err){
         callback(err);
     });
   });
@@ -65,8 +65,8 @@ function createNewChildTodo(parent,name,remind_time,email_remind,db,callback){
 
 function completeTaskById(todoId,db,callback){
   db.models.Todo.get(todoId, funtion(err,result){
-    result[0].completed = true;
-    result[0].save(function(err){
+    result.completed = true;
+    result.save(function(err){
         callback(err);
     });
   });
@@ -74,8 +74,8 @@ function completeTaskById(todoId,db,callback){
 
 function reopenTaskById(todoId,db,callback){
   db.models.Todo.get(todoId, funtion(err,result){
-    result[0].completed = false;
-    result[0].save(function(err){
+    result.completed = false;
+    result.save(function(err){
         callback(err);
     });
   });
