@@ -1,6 +1,6 @@
 {
-  "name": "SSERAPDEV2015-API",
-  "description": "API for SSERAPDEV2015",
+  "name": "sserapdev2015-api",
+  "description": "API for SSERapDev2015",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -8,12 +8,13 @@
   },
   "dependencies": {
     "body-parser": "~1.10.1",
-    "cookie-parser": "~1.3.3",
+    "cors": "^2.5.2",
     "express": "~4.10.7",
+    "express-jwt": "^0.6.2",
+    "jsonwebtoken": "^3.2.0",
     "morgan": "~1.5.1",
     "mysql": "~2.5.4",
     "orm": "^2.1.20",
-    "serve-favicon": "~2.2.0",
     "sqlite3": "^3.0.4"
   }
 }

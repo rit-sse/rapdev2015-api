@@ -4,7 +4,7 @@ var router = express.Router();
 router
   .route('/')
     .get(function(req, res, next) {
-
+      res.send(['words']);
     })
     .post(function(req, res, nex) {
 
@@ -24,4 +24,4 @@ router
 
 module.exports = function(app) {
   app.use('/api/tags', router);
-}
+};
