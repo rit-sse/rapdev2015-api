@@ -62,3 +62,21 @@ function createNewChildTodo(parent,name,remind_time,email_remind,db,callback){
     callback(err,result);
   });
 }
+
+function completeTaskById(todoId,db,callback){
+  db.models.Todo.get(todoId, funtion(err,result){
+    result[0].completed = true;
+    result[0].save(function(err){
+        callback(err);
+    });
+  });
+}
+
+function reopenTaskById(todoId,db,callback){
+  db.models.Todo.get(todoId, funtion(err,result){
+    result[0].completed = false;
+    result[0].save(function(err){
+        callback(err);
+    });
+  });
+}
