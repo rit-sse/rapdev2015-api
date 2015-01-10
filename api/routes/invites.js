@@ -14,5 +14,5 @@ router
     });
 
 module.exports = function(app) {
-  app.use('/api/invite', router);
+  app.use('/api/invites', router);
 }

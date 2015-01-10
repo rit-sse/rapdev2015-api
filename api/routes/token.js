@@ -16,7 +16,7 @@ module.exports = function(app, secret) {
     var provider = req.param('provider');
 
     res.statusCode = 401;
-    
+
     switch (provider) {
       case 'facebook': {
         rq('https://graph.facebook.com/oauth/access_token?client_id='+fbAppId+'&client_secret='+fbAppSecret+'&grant_type=client_credentials')
@@ -24,11 +24,11 @@ module.exports = function(app, secret) {
           return rq('https://graph.facebook.com/debug_token?input_token='+req.param('token')+'&'+access_token).then(function(resp) {
             resp = JSON.parse(resp);
             if ((resp.data.app_id == fbAppId) && resp.data.is_valid && (resp.data.user_id == req.param('user'))) {
-              user.createUser(resp, req, function(userId) {
-                    var response = jwt.sign({ id: userId  }, secret, {expiresInMinutes: expiresIn}); 
+              req.models.user.createUser(resp, req.models, function(userId) {
+                var response = jwt.sign({ id: userId  }, secret, {expiresInMinutes: expiresIn});
 
-                    res.statusCode = 200;
-                    res.send({token: response, exp: new Date((new Date()).getTime() + expiresIn*60000) });
+                res.statusCode = 200;
+                res.send({token: response, exp: new Date((new Date()).getTime() + expiresIn*60000) });
               });
             } else {
               res.send({error: 'Got invalid credntials back from facebook.'});
@@ -49,7 +49,7 @@ module.exports = function(app, secret) {
       }
     }
   });
-  
+
   app.use('/token', router);
 
   return router;

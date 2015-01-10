@@ -5,10 +5,10 @@ var orm = require('orm');
 
 module.exports = function(db, models) {
   var Facebook = db.define('facebook', {
-    userId: String
+    facebookId: String
   }, {
     validate: {
-      userId: [
+      facebookId: [
         orm.validators.required(),
         orm.validators.unique(),
         orm.validators.notEmptyString()
@@ -17,7 +17,8 @@ module.exports = function(db, models) {
   });
 
   Facebook.associate = function(models) {
- }
+    Facebook.hasOne('user', models.user, { reverse: 'facebook' });
+  }
 
   models.facebook = Facebook;
 }
