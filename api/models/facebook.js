@@ -7,7 +7,7 @@ module.exports = function(db, models) {
   var Facebook = db.define('facebook', {
     facebookId: String
   }, {
-    validate: {
+    validations: {
       facebookId: [
         orm.validators.required(),
         orm.validators.unique(),
