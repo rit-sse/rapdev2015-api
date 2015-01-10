@@ -1,24 +1,26 @@
-"use strict";
+'use strict';
 
 var express = require('express');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
-var favicon = require('serve-favicon');
 var orm = require('orm');
-var env = process.env.NODE_ENV || "development";
+var cors = require('cors');
+var env = process.env.NODE_ENV || 'development';
 var ormOpts = require('./config/orm.json')[env];
 
 var routes = require('./routes');
 var models = require('./models');
+var jwt = require('express-jwt');
+
+var secret = 'SUPAH SEKRIT SECRET';
 
 var app = express();
 
-app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(cors());
+app.use(jwt({secret: secret}).unless({path: ['/token']}));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
 
 app.use(orm.express(ormOpts, {
   define: function (db, m) {
@@ -27,7 +29,7 @@ app.use(orm.express(ormOpts, {
   }
 }));
 
-routes(app);
+routes(app, secret);
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
@@ -39,8 +41,14 @@ app.use(function(req, res, next) {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500).send('Error!');
+app.use(function(err, req, res, next) {  
+  if (err.name === 'UnauthorizedError') {
+    res.send(401, 'invalid token...');
+  }
+  if (process.env.NODE_ENV != 'development') {
+    res.status(err.status || 500).send('internal server error!');
+  }
 });
+
 
 module.exports = app;
