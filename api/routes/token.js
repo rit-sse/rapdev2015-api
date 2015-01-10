@@ -3,7 +3,6 @@
 var express = require('express');
 var jwt = require('jsonwebtoken');
 var rq = require('request-promise');
-var user = require('../services/user');
 
 var fbAppId = '1654582774769215';
 var fbAppSecret = 'b35b4d0bc7e91f472895900a40879851';
