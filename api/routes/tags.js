@@ -14,7 +14,7 @@ router
       });
     })
     .post(function(req, res, nex) {
-      req.models.tag.createTag(req.query.name, req.query.color, req.user.id, req.models, function(result) {
+      req.models.tag.createTag(req.body.name, req.body.color, req.user.id, req.models, function(result) {
         res.send(result);
       });
     });
