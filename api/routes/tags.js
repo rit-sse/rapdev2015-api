@@ -8,7 +8,7 @@ router
         var userTags = []
         for(var i = 0; i < tags.length; i++) {
           var tag = tags[i];
-          userTags.push({name:tag["name"], color:tag["color"]});
+          userTags.push({id:tag["id"], name:tag["name"], color:tag["color"]});
         }
         res.send(userTags);
       });
@@ -22,7 +22,15 @@ router
 router
   .route('/:id')
     .get(function(req, res, next) {
-
+      console.log(req.params.id);
+      req.models.tag.find({id:req.params.id}, function(err, tags) {
+        if(tags.length == 1) {
+          var tag = tags[0];
+          res.send({id:tag["id"], name:tag["name"], color:tag["color"]});
+        } else {
+          res.send({result:"ERROR"});
+        }
+      });
     })
     .put(function(req, res, nex) {
 
