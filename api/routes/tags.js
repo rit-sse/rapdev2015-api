@@ -5,15 +5,10 @@ router
   .route('/')
     .get(function(req, res, next) {
       req.models.tag.find({user_id: req.user.id}, function(err, tags) {
-        var userTags = []
-        for(var i = 0; i < tags.length; i++) {
-          var tag = tags[i];
-          userTags.push({id:tag["id"], name:tag["name"], color:tag["color"]});
-        }
-        res.send(userTags);
+        res.send(tags);
       });
     })
-    .post(function(req, res, nex) {
+    .post(function(req, res, next) {
       req.models.tag.createTag(req.body.name, req.body.color, req.user.id, req.models, function(result) {
         res.send(result);
       });
@@ -24,31 +19,31 @@ router
     .get(function(req, res, next) {
       req.models.tag.get(req.params.id, function(err, tag) {
           if(err) {
-            res.send({result:"ERROR"});
+            next(err);
           } else {
-            res.send({id:tag["id"], name:tag["name"], color:tag["color"]});
+            res.send(tag);
           }
       });
     })
-    .put(function(req, res, nex) {
-      req.models.tag.get(req.params.id, function(err, Tag) {
-        var newName = req.body.name;
-        var newColor = req.body.color;
-        Tag.save({name:newName, color:newColor}, function(err) {
+    .put(function(req, res, next) {
+      req.models.tag.get(req.params.id, function(err, tag) {
+        tag.name = req.body.name || tag.name;
+        tag.color = req.body.color || tag.color;
+        tag.save(req, function(err) {
           if(err) {
-            res.send({result:"ERROR"});
+            next(err);
           } else {
-            res.send({result:"SUCCESS"});
+            res.send(tag);
           }
         });
       });
 
     })
     .delete(function(req, res, next) {
-      req.models.tag.get(req.params.id, function(err, Tag) {
-        Tag.remove(function(err) {
+      req.models.tag.get(req.params.id, function(err, tag) {
+        tag.remove(function(err) {
           if(err) {
-            res.send({result:"ERROR"});
+            next(err);
           } else {
             res.send({result:"SUCCESS"});
           }

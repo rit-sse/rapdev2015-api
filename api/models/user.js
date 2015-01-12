@@ -28,8 +28,8 @@ module.exports = function(db, models) {
       type: type
     };
     var email = config.email;
-    models.authMethod.find( authMethod , function (err, users) {
-      if(users.length == 0) {
+    models.authMethod.find( authMethod , function (err, authMethods) {
+      if(authMethods.length == 0) {
         models.authMethod.create(authMethod, function(err,results) {
           var authResults = results;
 
@@ -37,12 +37,14 @@ module.exports = function(db, models) {
             if (err) throw err;
             var userResult = results;
             userResult.setAuthMethods(authResults, function(err){
-               cb(userResult.id);
+               cb(userResult);
             });
           });
         });
       } else {
-        cb(users[0]);
+        authMethods[0].getUser(function(err, user){
+          cb(user);
+        });
       }
     });
   }
