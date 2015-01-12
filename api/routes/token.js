@@ -24,7 +24,7 @@ module.exports = function(app, secret) {
             var fname = resp.first_name;
             var lname = resp.last_name;
             if (email && uid && timezone && fname && lname) {
-              req.models.user.createUser({id: uid, email: email}, req.models, function(userId) {
+              req.models.user.createUser({id: uid, email: email}, provider, req.models, function(userId) {
                 var response = jwt.sign({ id: userId  }, secret, {expiresInMinutes: expiresIn});
 
                 res.statusCode = 200;

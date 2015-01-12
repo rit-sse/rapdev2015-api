@@ -4,10 +4,10 @@ var orm = require('orm');
 
 module.exports = function(db, models) {
   var User = db.define('users', {
-      email: String
+      preferredEmail: String
    }, {
     validations: {
-      email: [
+      preferredEmail: [
         orm.validators.required(),
         orm.validators.unique(),
         orm.validators.notEmptyString(),
@@ -18,18 +18,20 @@ module.exports = function(db, models) {
 
   User.associate = function(models) { }
 
-  User.createUser = function(config, models, cb) {
-    var facebook = {};
-    facebook.facebookId = config.id;
-    var email = config.email;
-    models.facebook.find({facebookId: facebook.facebookId}, function (err, users) {
+  User.createUser = function(config, type, models, cb) {
+    var authMethod = {
+      authId: config.id,
+      type: type
+    };
+    var email = config.email; //for the time being
+    models.authMethod.find( authMethod , function (err, users) {
       if(users.length == 0) {
-        models.facebook.create(facebook, function(err,results) {
-          var fbidResults = results;
+        models.authMethod.create(authMethod, function(err,results) {
+          var authResults = results;
 
-          User.create({ email: email }, function(err, results) {
+          User.create({ preferedEmail: email }, function(err, results) {
             var userResult = results;
-            userResult.setFacebook(fbidResults, function(err){
+            userResult.setAuthMethods(authResults, function(err){
                cb(userResult.id);
             });
           });
