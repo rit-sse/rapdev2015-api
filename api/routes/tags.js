@@ -23,16 +23,12 @@ router
   .route('/:id')
     .get(function(req, res, next) {
       console.log(req.params.id);
-      req.models.tag.find({id:req.params.id}, function(err, tags) {
-        if(tags.length == 1) {
-          var tag = tags[0];
+      req.models.tag.get(req.params.id, function(err, tag) {
           res.send({id:tag["id"], name:tag["name"], color:tag["color"]});
-        } else {
-          res.send({result:"ERROR"});
-        }
       });
     })
     .put(function(req, res, nex) {
+      var tagID = req.params.id;
 
     })
     .delete(function(req, res, next) {
