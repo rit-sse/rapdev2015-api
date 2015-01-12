@@ -53,6 +53,10 @@ module.exports = function(db, models) {
     });
   }
 
+  Event.deleteEvent = function(eventId, cb) {
+    Event.find({id: eventId}).remove(cb);
+  }
+
   Event.createEvent = function(name, description, startTime, endTime, userId, models, cb) {
     models.user.find({id: userId}, function(err,user){
       if (err){

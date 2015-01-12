@@ -49,7 +49,15 @@ router
       });
     })
     .delete(function(req, res, next) {
-
+      console.log("deleting");
+      req.models.event.deleteEvent( req.params.id, function(err) {
+        if (err) {
+          next(err);
+        }
+        else {
+          res.send(200);
+        }
+      })
     });
 
 router
