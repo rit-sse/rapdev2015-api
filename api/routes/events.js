@@ -6,8 +6,6 @@ router
   .route('/')
     .get(function(req, res, next) {
       req.models.event.findAllById(req.user.id,function(err,results){
-        console.log(err);
-        console.log(results);
         if (err){
           next(err);
         } else {
@@ -16,7 +14,15 @@ router
       });
     })
     .post(function(req, res, next) {
-
+      console.log(req.body);
+      req.models.event.createEvent(req.body.name, req.body.description, req.body.startTime,
+                              req.body.endTime, req.user.id, function (err, result){
+        if (err){
+          res.send(err);
+        } else {
+          res.send(result);
+        }
+      })
     });
 
 router

@@ -33,5 +33,9 @@ module.exports = function(db, models) {
     Event.find({user: userId}, cb);
   }
 
+  Event.createEvent = function(name, description, startTime, endTime, userId, cb) {
+    Event.create({name: name, description: description, startTime: startTime, endTime: endTime, user_id: userId}, cb)
+  }
+
   models.event = Event;
 }
