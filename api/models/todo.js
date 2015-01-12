@@ -14,9 +14,7 @@ module.exports = function(db, models) {
   }, {
     validations: {
       name: orm.validators.required(),
-      remindTime: orm.validators.required(),
       completed: orm.validators.required(),
-      emailRemind: orm.validators.required(),
       lapseTime: orm.validators.required()
     }
   });
