@@ -23,7 +23,7 @@ module.exports = function(app, secret) {
           return rq('https://graph.facebook.com/debug_token?input_token='+req.param('token')+'&'+access_token).then(function(resp) {
             resp = JSON.parse(resp);
             if ((resp.data.app_id == fbAppId) && resp.data.is_valid && (resp.data.user_id == req.param('user'))) {
-              req.models.user.createUser(resp, req.models, function(userId) {
+              req.models.user.createUser(resp.data.user_id, provider, req.models, function(userId) {
                 var response = jwt.sign({ id: userId  }, secret, {expiresInMinutes: expiresIn});
 
                 res.statusCode = 200;
