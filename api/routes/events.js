@@ -5,7 +5,7 @@ var router = express.Router();
 router
   .route('/')
     .get(function(req, res, next) {
-      req.models.event.findAllById(req.user.id,function(err,results){
+      req.models.event.findAllByUserId(req.user.id,function(err,results){
         if (err){
           next(err);
         } else {
@@ -27,7 +27,14 @@ router
 router
   .route('/:id')
     .get(function(req, res, next) {
-
+      req.models.event.findById(req.params.id, function(err, result) {
+        if (err) {
+          next(err);
+        }
+        else {
+          res.send(result);
+        }
+      });
     })
     .put(function(req, res, next) {
 
