@@ -42,7 +42,7 @@ router
           }
         });
       });
-      
+
     })
     .delete(function(req, res, next) {
       req.models.tag.get(req.params.id, function(err, Tag) {
