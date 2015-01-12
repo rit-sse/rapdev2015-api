@@ -18,10 +18,10 @@ module.exports = function(db, models) {
 
   User.associate = function(models) { }
 
-  User.createUser = function(res, models, cb) {
+  User.createUser = function(config, models, cb) {
     var facebook = {};
-    facebook.facebookId = res.data.user_id;
-    var email = facebook.facebookId + '@gmail.com'; //for the time being
+    facebook.facebookId = config.id;
+    var email = config.email;
     models.facebook.find({facebookId: facebook.facebookId}, function (err, users) {
       if(users.length == 0) {
         models.facebook.create(facebook, function(err,results) {
