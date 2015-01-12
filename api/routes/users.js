@@ -5,8 +5,10 @@ router
   .route('/')
     .get(function(req, res, next) {
       req.models.user.listUsers("", "", function(err, result) {
+        if (err) {
+          next(err);
+        }
         res.send(result);
-        console.log(err);
       });
     })
     .post(function(req, res, nex) {
