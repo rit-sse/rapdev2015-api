@@ -37,7 +37,16 @@ router
       });
     })
     .put(function(req, res, next) {
-
+      req.models.event.updateEvent( req.params.id, req.body.name,
+                                    req.body.description, req.body.startTime,
+                                    req.body.endTime, function(err, result) {
+        if (err) {
+          next(err);
+        }
+        else {
+          res.send(result);
+        }
+      });
     })
     .delete(function(req, res, next) {
 

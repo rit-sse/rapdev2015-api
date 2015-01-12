@@ -41,6 +41,18 @@ module.exports = function(db, models) {
     Event.find({id: eventId}, cb);
   }
 
+  Event.updateEvent = function(eventId, name, description, startTime, endTime, cb) {
+    Event.get(eventId, function(err, event) {
+      if (err) {
+        cb(err, event);
+      }
+      else {
+        event.save({  name: name, description: description,
+                      startTime: startTime, endTime: endTime}, cb);
+      }
+    });
+  }
+
   Event.createEvent = function(name, description, startTime, endTime, userId, models, cb) {
     models.user.find({id: userId}, function(err,user){
       if (err){
