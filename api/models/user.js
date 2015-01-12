@@ -30,6 +30,7 @@ module.exports = function(db, models) {
           var authResults = results;
 
           User.create({ preferedEmail: email }, function(err, results) {
+            if (err) throw err;
             var userResult = results;
             userResult.setAuthMethods(authResults, function(err){
                cb(userResult.id);
