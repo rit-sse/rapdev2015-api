@@ -68,5 +68,5 @@ router
     });
 
 module.exports = function(app) {
-  app.use('/api/todo', router);
+  app.use('/api/todos', router);
 }
