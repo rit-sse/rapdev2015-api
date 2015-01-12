@@ -14,9 +14,8 @@ router
       });
     })
     .post(function(req, res, next) {
-      console.log(req.body);
       req.models.event.createEvent(req.body.name, req.body.description, req.body.startTime,
-                              req.body.endTime, req.user.id, function (err, result){
+                              req.body.endTime, req.user.id, req.models, function (err, result){
         if (err){
           res.send(err);
         } else {

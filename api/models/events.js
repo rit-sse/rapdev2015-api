@@ -3,7 +3,9 @@
 var orm = require("orm");
 
 function startTimeBeforeEndTime(v, next) {
-  if(v < this.endTime) {
+  var start = new Date(v);
+  var end = new Date(this.endTime);
+  if(start < end) {
     return next();
   }
   return next('start-time-after-end-time');
@@ -19,7 +21,9 @@ module.exports = function(db, models) {
     validations: {
       name: [
         orm.validators.required(),
-        orm.validators.notEmptyString(),
+        orm.validators.notEmptyString()
+      ],
+      startTime:[
         startTimeBeforeEndTime
       ]
     }
@@ -33,8 +37,21 @@ module.exports = function(db, models) {
     Event.find({user: userId}, cb);
   }
 
-  Event.createEvent = function(name, description, startTime, endTime, userId, cb) {
-    Event.create({name: name, description: description, startTime: startTime, endTime: endTime, user_id: userId}, cb)
+  Event.createEvent = function(name, description, startTime, endTime, userId, models, cb) {
+    models.user.find({id: userId}, function(err,user){
+      if (err){
+        cb(err,user);
+      } else {
+        models.event.create({name:name, description: description, startTime: startTime, endTime: endTime}, function(err,newEvent){
+          if (err){
+            cb(err,newEvent);
+          } else {
+            var foundUser = user[0];
+            newEvent.setUser(foundUser, cb);
+          }
+        });
+      }
+    });
   }
 
   models.event = Event;
