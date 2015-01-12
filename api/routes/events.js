@@ -1,10 +1,19 @@
+'use strict';
 var express = require('express');
 var router = express.Router();
 
 router
   .route('/')
     .get(function(req, res, next) {
-
+      req.models.event.findAllById(req.user.id,function(err,results){
+        console.log(err);
+        console.log(results);
+        if (err){
+          next(err);
+        } else {
+          res.send(results);
+        }
+      });
     })
     .post(function(req, res, next) {
 

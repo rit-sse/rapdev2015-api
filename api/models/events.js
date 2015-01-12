@@ -29,5 +29,9 @@ module.exports = function(db, models) {
     Event.hasOne('user', models.user, { reverse: 'events' });
   }
 
+  Event.findAllById = function(userId, cb){
+    Event.find({user: userId}, cb);
+  }
+
   models.event = Event;
 }
