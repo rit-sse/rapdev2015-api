@@ -4,10 +4,13 @@ var router = express.Router();
 router
   .route('/')
     .get(function(req, res, next) {
-      res.send(['words']);
+      console.log(req.user.id);
+      res.send(["hello"]);
     })
     .post(function(req, res, nex) {
-
+      req.models.tag.createTag(req.query.name, req.query.color, req.user.id, req.models, function(result) {
+        res.send(result);
+      });
     });
 
 router
