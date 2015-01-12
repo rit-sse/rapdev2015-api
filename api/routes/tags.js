@@ -28,8 +28,19 @@ router
       });
     })
     .put(function(req, res, nex) {
-      var tagID = req.params.id;
-
+      console.log(req.body);
+      req.models.tag.get(req.params.id, function(err, Tag) {
+        var newName = req.body.name;
+        var newColor = req.body.color;
+        Tag.save({name:newName, color:newColor}, function(err) {
+          if(err) {
+            res.send({status:"ERROR"});
+          } else {
+            res.send({status:"SUCCESS"});
+          }
+        });
+      });
+      
     })
     .delete(function(req, res, next) {
 
