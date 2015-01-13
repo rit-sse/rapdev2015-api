@@ -11,6 +11,15 @@ function startTimeBeforeEndTime(v, next) {
   return next('start-time-after-end-time');
 }
 
+function isDate(v, next) {
+  if (v instanceof Date) {
+    if ( !isNaN(v.getTime()) ) {
+      return next();
+    }
+  }
+  return next('is not type Date');
+}
+
 module.exports = function(db, models) {
   var Event = db.define('events', {
     name: String,
@@ -24,7 +33,13 @@ module.exports = function(db, models) {
         orm.validators.notEmptyString()
       ],
       startTime:[
+        orm.validators.required(),
+        isDate,
         startTimeBeforeEndTime
+      ],
+      endTime:[
+        orm.validators.required(),
+        isDate
       ]
     }
   });
@@ -60,11 +75,11 @@ module.exports = function(db, models) {
   Event.createEvent = function(name, description, startTime, endTime, userId, models, cb) {
     models.user.find({id: userId}, function(err,user){
       if (err){
-        cb(err,user);
+        cb(err);
       } else {
         models.event.create({name:name, description: description, startTime: startTime, endTime: endTime}, function(err,newEvent){
           if (err){
-            cb(err,newEvent);
+            cb(err);
           } else {
             var foundUser = user[0];
             newEvent.setUser(foundUser, cb);
