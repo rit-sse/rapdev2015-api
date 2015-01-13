@@ -45,7 +45,7 @@ module.exports = function(db, models) {
   });
 
   Event.associate = function(models) {
-    Event.hasOne('user', models.user, { reverse: 'events' });
+    Event.hasOne('calendar', models.calendar, { reverse: 'events' });
   }
 
   Event.findAllByUserId = function(userId, cb){
