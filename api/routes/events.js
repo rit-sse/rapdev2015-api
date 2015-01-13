@@ -63,7 +63,7 @@ router
 router
   .route('/:id/invite')
     .post(function(req, res, next) {
-      req.models.invites.create({email:req.body.email,
+      req.models.calendarItem.create({email:req.body.email,
                                  accpeted:'Pending',
                                  itemowner_id:req.user.id,
                                  invitedby_id:req.user.id,
