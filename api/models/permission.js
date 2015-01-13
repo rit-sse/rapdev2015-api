@@ -6,7 +6,7 @@ module.exports = function(db, models) {
 
   var Permission = db.define('permissions', {
     name: String,
-    type: ['READ', 'EDIT', 'ADMINISTRATE']
+    type: ['READ', 'EDIT', 'ADMIN']
   });
 
   Permission.associate = function(models) {
