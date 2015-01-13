@@ -12,7 +12,7 @@ module.exports = function(db, models) {
   });
 
   CalendarItem.associate = function(models) {
-    CalendarItem.hasOne('itemOwner', models.user, { reverse: 'itemsOwned' });
+    CalendarItem.hasOne('calendar', models.calendar, { reverse: 'calendarItems' });
     CalendarItem.hasOne('invitedBy', models.user, { reverse: 'itemsInvitedTo' });
     CalendarItem.hasOne('event', models.event, { reverse: 'calendarItems' });
   }
