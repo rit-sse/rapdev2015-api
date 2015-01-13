@@ -47,11 +47,17 @@ router
   .route('/:id/tags')
     .get(function(req, res, next) {
 
-    })
+    });
+
+router
+  .route('/id/tags/add')
     .put(function(req, res, next) {
 
-    })
-    .delete(function(req, res, next) {
+    });
+
+router
+  .route('/id/tags/delete')
+    .put(function(req, res, next) {
 
     });
 

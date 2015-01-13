@@ -19,7 +19,7 @@ router
     .get(function(req, res, next) {
       req.models.tag.get(req.params.id, function(err, tag) {
           if(err) {
-            next(err);
+            next({error: err, status: 422});
           } else {
             res.send(tag);
           }
@@ -31,7 +31,7 @@ router
         tag.color = req.body.color || tag.color;
         tag.save(req, function(err) {
           if(err) {
-            next(err);
+            next({error: err, status: 422});
           } else {
             res.send(tag);
           }
@@ -43,7 +43,7 @@ router
       req.models.tag.get(req.params.id, function(err, tag) {
         tag.remove(function(err) {
           if(err) {
-            next(err);
+            next({error: err, status: 422});
           } else {
             res.send({result:"SUCCESS"});
           }
