@@ -42,11 +42,8 @@ app.use(function(req, res, next) {
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  if (err.name === 'UnauthorizedError') {
-    res.send(401, 'invalid token...');
-  }
   if (env != 'development') {
-    res.status(err.status || 500).send('internal server error!');
+    res.status(err.status || 500).send(err.message ||'internal server error!');
   }
   else {
     res.status(err.status).send(err);
