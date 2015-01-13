@@ -1,5 +1,5 @@
 var fs = require('fs');
-var definedModels;
+var schema = require('../db');
 module.exports.load = function(db, models) {
   definedModels = models;
   fs
@@ -11,14 +11,10 @@ module.exports.load = function(db, models) {
       require('./' + file)(db, models);
     });
 
-  Object.keys(models).forEach(function(modelName) {
-    if ('associate' in models[modelName]) {
-      models[modelName].associate(models);
+  Object.keys(schema.models).forEach(function(modelName) {
+    if ('associate' in schema.models[modelName]) {
+      schema.models[modelName].associate(schema.models);
     }
   });
 
-}
-
-module.exports.model = function(name) {
-  return definedModels[name]
 }

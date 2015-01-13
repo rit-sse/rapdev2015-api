@@ -1,8 +1,5 @@
 var Schema = require('jugglingdb').Schema
 var env = process.env.NODE_ENV || 'development';
-var conf = require('./config/orm');
+var conf = require('./config/orm')[env];
 
-var adapter = conf[env].adapter;
-delete conf[env].adapter;
-
-module.exports = new Schema(adapter, conf[env])
+module.exports = new Schema(conf.adapter, conf);

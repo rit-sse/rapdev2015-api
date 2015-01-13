@@ -6,7 +6,6 @@ var logger = require('morgan');
 var orm = require('orm');
 var cors = require('cors');
 var env = process.env.NODE_ENV || 'development';
-var ormOpts = require('./config/orm.json')[env];
 
 var routes = require('./routes');
 var models = require('./models');
@@ -21,13 +20,6 @@ app.use(jwt({secret: secret}).unless({path: ['/token']}));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-
-app.use(orm.express(ormOpts, {
-  define: function (db, m) {
-    models.load(db, m);
-    db.sync();
-  }
-}));
 
 routes(app, secret);
 

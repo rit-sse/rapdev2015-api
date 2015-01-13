@@ -13,9 +13,9 @@
     "express": "~4.10.7",
     "express-jwt": "^0.6.2",
     "jsonwebtoken": "^3.2.0",
+    "jugglingdb": "^0.3.0",
     "morgan": "~1.5.1",
     "mysql": "~2.5.4",
-    "jugglingdb": "^2.1.20",
     "request-promise": "^0.3.2",
     "sqlite3": "^3.0.4",
     "uuid": "^2.0.1"

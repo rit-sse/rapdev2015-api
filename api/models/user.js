@@ -2,10 +2,15 @@
 
 var db = require('../db');
 
-var User = db.define('users', {
+var User = db.define('User', {
   preferredEmail: String
 });
 
+User.validatesPresenceOf('email');
+
+User.associate = function(models) {
+  User.hasMany(models.AuthMethod, { as: 'authMethods', foreignKey: 'userId' });
+}
 
 User.createUser = function(config, type, models, cb) {
   var authMethod = {
