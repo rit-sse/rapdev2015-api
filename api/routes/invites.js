@@ -4,7 +4,7 @@ var router = express.Router();
 router
   .route('/:id/accept')
     .post(function(req, res, next) {
-      req.models.invites.get(req.params.id, function(err, invite) {
+      req.models.calendarItem.get(req.params.id, function(err, invite) {
         invite.accepted = 'Accepted';
         invite.save(invite, function(error) {
           if(err) {
@@ -19,7 +19,7 @@ router
 router
   .route('/:id/decline')
     .post(function(req, res, next) {
-      req.models.invites.get(req.params.id, function(err, invite) {
+      req.models.calendarItem.get(req.params.id, function(err, invite) {
         invite.accepted = 'Declined';
         invite.save(invite, function(error) {
           if(err) {
