@@ -9,8 +9,13 @@ router
       });
     })
     .post(function(req, res, next) {
-      req.models.tag.createTag(req.body.name, req.body.color, req.user.id, req.models, function(result) {
-        res.send(result);
+      req.models.tag.createTag(req.body.name, req.body.color, req.user.id, function(err, result) {
+        if (err) {
+          next(err);
+        }
+        else {
+          res.send(result);
+        }
       });
     });
 
@@ -27,15 +32,20 @@ router
     })
     .put(function(req, res, next) {
       req.models.tag.get(req.params.id, function(err, tag) {
-        tag.name = req.body.name || tag.name;
-        tag.color = req.body.color || tag.color;
-        tag.save(req, function(err) {
-          if(err) {
-            next({error: err, status: 422});
-          } else {
-            res.send(tag);
-          }
-        });
+        if (err) {
+          next({error: err, status: 422});
+        }
+        else {
+          tag.name = req.body.name || tag.name;
+          tag.color = req.body.color || tag.color;
+          tag.save(function(err) {
+            if(err) {
+              next({error: err, status: 422});
+            } else {
+              res.send(tag);
+            }
+          });
+        }
       });
 
     })
@@ -45,7 +55,7 @@ router
           if(err) {
             next({error: err, status: 422});
           } else {
-            res.send({result:"SUCCESS"});
+            res.status(204).send({});
           }
         });
       });
