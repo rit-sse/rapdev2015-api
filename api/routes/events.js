@@ -63,7 +63,18 @@ router
 router
   .route('/:id/invite')
     .post(function(req, res, next) {
-
+      req.models.invites.create({email:req.body.email,
+                                 accpeted:'Pending',
+                                 itemowner_id:req.user.id,
+                                 invitedby_id:req.user.id,
+                                 event_id:req.params.id},
+        function(err, result) {
+          if(err) {
+          next({error:err, status: 422});
+        } else {
+          res.send({});
+        }
+      });
     });
 
 router
