@@ -24,37 +24,36 @@ module.exports = function(db, models) {
     Todo.hasOne('parent', Todo, {reverse: 'subtasks'});
   }
   
-  Todo.getAllTodosOfUser = function(request,callback){
-    request.models.todo.find({user_id:request.user.id.user_id},function(err,results){
+  Todo.getAllTodosOfUser = function(models,user,callback){
+    models.todo.find({user_id:user.id.user_id},function(err,results){
       callback(err,results);
     });
   },
 
-  Todo.createNewTodo = function(name,dueDate,request,callback){
+  Todo.createNewTodo = function(name,dueDate,models,user,callback){
     var newTodo = {};
     newTodo.name = name;
     newTodo.dueDate = dueDate;
     newTodo.completed = false;
     newTodo.lapseTime = 0;
-    request.models.todo.create(newTodo,function(err,result){
-      result.user_id = (request.user.id.user_id);
+    models.todo.create(newTodo,function(err,result){
+      result.user_id = (user.id.user_id);
       result.save(function(err){
           callback(err,result);
       });
     });
   },
 
-  Todo.getTodoById = function(todoId,request,callback){
+  Todo.getTodoById = function(todoId,models,callback){
     console.log(todoId);
-    request.models.todo.get(todoId, function(err,result){
+    models.todo.get(todoId, function(err,result){
       console.log(result)
       callback(err,result);
     });
   },
 
-  Todo.editTodoById = function(todoId,todo,request,callback){
-    console.log(request.body);
-    request.models.todo.get(todoId, function(err,result){
+  Todo.editTodoById = function(todoId,todo,models,callback){
+    models.todo.get(todoId, function(err,result){
       result.name = todo.name;
       result.dueDate = todo.dueDate;
       result.completed = todo.completed;
@@ -67,28 +66,28 @@ module.exports = function(db, models) {
     });
   },
 
-  Todo.removeTodoById = function(todoId,request,callback){
-    request.models.todo.get(todoId, function(err,result){
+  Todo.removeTodoById = function(todoId,models,callback){
+    models.todo.get(todoId, function(err,result){
       result.remove(function(err){
           callback(err);
       });
     });
   },
 
-  Todo.getChildrenOfTodoById = function(todoId,request,callback){
-    request.models.todo.find({parent:todoId},function(err,results){
+  Todo.getChildrenOfTodoById = function(todoId,models,callback){
+    models.todo.find({parent:todoId},function(err,results){
       callback(err,result);
     });
   },
 
-  Todo.createNewChildTodo = function(parent,name,dueDate,request,callback){
+  Todo.createNewChildTodo = function(parent,name,dueDate,models,usercallback){
     var newTodo = {};
     newTodo.name = name;
     newTodo.dueDate = dueDate;
     newTodo.completed = false;
     newTodo.lapseTime = 0;
-    request.models.todo.create(newTodo,function(err,result){
-      newTodo.setUser(request.user.id);
+    models.todo.create(newTodo,function(err,result){
+      newTodo.setUser(user.id);
       newTodo.setParent(parent);
       result.save(function(err){
           callback(err,result);
@@ -96,8 +95,8 @@ module.exports = function(db, models) {
     });
   },
 
-  Todo.completeTaskById = function(todoId,request,callback){
-    request.models.todo.get(todoId, function(err,result){
+  Todo.completeTaskById = function(todoId,models,callback){
+    models.todo.get(todoId, function(err,result){
       result.completed = true;
       result.save(function(err){
           callback(err);
