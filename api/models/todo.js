@@ -20,7 +20,7 @@ module.exports = function(db, models) {
   });
 
   Todo.associate = function(models) {
-    Todo.hasOne('calendar', models.calendar, { reverse: 'todos' })
+    Todo.hasOne('user', models.user, { reverse: 'todos' })
     Todo.hasOne('parent', Todo, {reverse: 'subtasks'});
   }
 

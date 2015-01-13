@@ -5,7 +5,8 @@ var orm = require('orm');
 module.exports = function(db, models) {
 
   var EventPermission = db.define('event_permissions', {
-    type: ['READ', 'EDIT', 'ADMIN', 'INVITE']
+    type: ['READ', 'EDIT'],
+    pending: Boolean
   });
 
   EventPermission.associate = function(models) {
