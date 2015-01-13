@@ -16,7 +16,10 @@ module.exports.load = function(db, models) {
       models[modelName].associate(models);
     }
   });
+  
 
 }
 
-module.exports.models = definedModels;
+module.exports.models = function(){
+  return definedModels;
+}
