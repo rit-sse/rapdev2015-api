@@ -15,7 +15,7 @@
     "jsonwebtoken": "^3.2.0",
     "morgan": "~1.5.1",
     "mysql": "~2.5.4",
-    "orm": "^2.1.20",
+    "jugglingdb": "^2.1.20",
     "request-promise": "^0.3.2",
     "sqlite3": "^3.0.4",
     "uuid": "^2.0.1"
