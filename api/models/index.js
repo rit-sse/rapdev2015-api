@@ -19,6 +19,4 @@ module.exports.load = function(db, models) {
 
 }
 
-module.exports.model = function(name) {
-  return definedModels[name]
-}
+module.exports.models = definedModels;
