@@ -4,15 +4,14 @@ var router = express.Router();
 router
   .route('/')
     .get(function(req, res, next) {
-    
-      req.todo.getAllTodosOfUser(function(result){
-        req.send(result);
+      req.models.todo.getAllTodosOfUser(req,function(err,result){
+        res.send(result);
       });
     })
     .post(function(req, res, next) {
       var body = req.body;
-      req.todo.createNewTodo(body.name,body.dueDate,req,function(result){
-        req.send(result);
+      req.models.todo.createNewTodo(body.name,body.dueDate,req,function(err,result){
+        res.send(result);
       });
     });
 
@@ -20,50 +19,51 @@ router
   .route('/:id')
     .get(function(req, res, next) {
       var body = req.body;
-      req.todo.getTodoById(body.todoId,req,function(result){
-        req.send(result);
+      req.models.todo.getTodoById(req.params.id,req,function(err,result){
+        res.send(result);
       });
     })
     .put(function(req, res, next) {
-      var body = req.body
-      req.todo.editTodoById(body.todoId,body.todo,req,function(result){
-        req.send(result);
+      var body = req.body;
+      console.log(body);
+      req.models.todo.editTodoById(req.params.id,body.todo,req,function(err,result){
+        res.send(result);
       });
     })
     .delete(function(req, res, next) {
       var body = req.body;
-      req.todo.removeTodoById(body.todoId,req,function(result){
-        req.send(result);
+      req.models.todo.removeTodoById(req.params.id,req,function(err){
+        res.send(err);
       });
     });
 
 router
   .route('/:id/complete')
     .put(function(req, res, next) {
-      req.todo.completeTaskById(req.body.todoId,req,function(result){
-        req.send(result);
+      req.models.todo.completeTaskById(req.params.id,req,function(err){
+        res.send(err);
       });
     });
 
 router
   .route('/:id/reopen')
     .put(function(req, res, next) {
-      req.todo.reopenTaskById(req.body.todoId,req,function(result){
-        req.send(result);
+      req.models.todo.reopenTaskById(req.params.id,req,function(err){
+        res.send(err);
       });
     });
 
 router
   .route('/:id/subtasks')
     .get(function(req, res, next) {
-      req.todo.getChildrenOfTodoById(req.body.todoId,req,function(result){
-        req.send(result);
+      req.models.todo.getChildrenOfTodoById(req.params.id,req,function(result){
+        res.send(result);
       });
     })
     .post(function(req, res, next) {
       var body = req.body;
-      req.todo.createNewChildTodo(body.parent,body.name,body.dueDate,req,function(result){
-        req.send(result);
+      req.models.todo.createNewChildTodo(body.parent,body.name,body.dueDate,req,function(result){
+        res.send(result);
       });
     });
 

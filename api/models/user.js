@@ -33,7 +33,7 @@ module.exports = function(db, models) {
             if (err) throw err;
             var userResult = results;
             userResult.setAuthMethods(authResults, function(err){
-               cb(userResult.id);
+               cb(userResult);
             });
           });
         });
