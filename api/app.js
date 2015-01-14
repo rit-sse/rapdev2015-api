@@ -6,7 +6,6 @@ var logger = require('morgan');
 var orm = require('orm');
 var cors = require('cors');
 var env = process.env.NODE_ENV || 'development';
-var ormOpts = require('./config/orm.json')[env];
 
 var routes = require('./routes');
 var models = require('./models');
@@ -15,6 +14,7 @@ var jwt = require('express-jwt');
 var secret = 'SUPAH SEKRIT SECRET';
 
 var app = express();
+var db = require('./db');
 
 app.use(cors());
 app.use(jwt({secret: secret}).unless({path: ['/token']}));
@@ -22,14 +22,9 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.use(orm.express(ormOpts, {
-  define: function (db, m) {
-    models.load(db, m);
-    db.sync();
-  }
-}));
-
 routes(app, secret);
+models();
+db.autoupdate();
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

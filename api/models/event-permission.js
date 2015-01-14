@@ -1,18 +1,18 @@
 'use strict';
 
-var orm = require('orm');
+var db = require('../db');
 
-module.exports = function(db, models) {
+var EventPermission = db.define('EventPermission', {
+  type: String,
+  pending: Boolean
+});
 
-  var EventPermission = db.define('event_permissions', {
-    type: ['READ', 'EDIT'],
-    pending: Boolean
-  });
+EventPermission.validatesPresenceOf('type', 'pending')
+EventPermission.validatesInclusionOf('type', { in: ['Read', 'Edit'] });
 
-  EventPermission.associate = function(models) {
-    EventPermission.hasOne('user', models.user, { reverse: 'permissions' });
-    EventPermission.hasOne('event', models.Event, { reverse: 'permissions' });
-  }
-
-  models.eventPermission = EventPermission;
+EventPermission.associate = function(models) {
+  EventPermission.belongsTo(models.User, { as: 'user', foreignKey: 'userId' });
+  EventPermission.belongsTo(models.Event, { as: 'event', foreignKey: 'eventId' });
 }
+
+module.exports = EventPermission;

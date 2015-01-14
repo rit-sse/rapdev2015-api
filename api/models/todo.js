@@ -1,28 +1,23 @@
 'use strict';
 
-var orm = require('orm');
+var db = require('../db');
 
-module.exports = function(db, models) {
-  var Todo = db.define('todos', {
-    name: String,
-    dueDate: Date,
-    completed: Boolean,
-    lapseTime: {
-      type: 'number',
-      unsigned: true
-    }
-  }, {
-    validations: {
-      name: orm.validators.required(),
-      completed: orm.validators.required(),
-      lapseTime: orm.validators.required()
-    }
-  });
+var Todo = db.define('Todo', {
+  name: String,
+  dueDate: Date,
+  completed: Boolean,
+  elapsedTime: Number
+});
 
-  Todo.associate = function(models) {
-    Todo.hasOne('user', models.user, { reverse: 'todos' })
-    Todo.hasOne('parent', Todo, {reverse: 'subtasks'});
-  }
+Todo.validatesPresenceOf('name', 'completed', 'elapsedTime');
 
-  models.todo = Todo;
+Todo.associate = function(models) {
+  Todo.belongsTo(models.User, { as: 'user', foreignKey: 'userId' });
+  Todo.belongsTo(Todo, { as: 'parent', foreignKey: 'parentId' });
+
+  Todo.hasMany(Todo, { as: 'subtasks', foreignKey: 'parentId' });
+
+  Todo.hasAndBelongsToMany('tags', { model: models.Tag });
 }
+
+module.exports = Todo;

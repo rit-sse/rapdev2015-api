@@ -1,24 +1,19 @@
 var fs = require('fs');
-var definedModels;
-module.exports.load = function(db, models) {
-  definedModels = models;
+var schema = require('../db');
+module.exports = function() {
   fs
     .readdirSync(__dirname)
     .filter(function(file) {
       return (file.indexOf('.') !== 0) && (file !== 'index.js');
     })
     .forEach(function(file) {
-      require('./' + file)(db, models);
+      require('./' + file);
     });
 
-  Object.keys(models).forEach(function(modelName) {
-    if ('associate' in models[modelName]) {
-      models[modelName].associate(models);
+  Object.keys(schema.models).forEach(function(modelName) {
+    if ('associate' in schema.models[modelName]) {
+      schema.models[modelName].associate(schema.models);
     }
   });
 
-}
-
-module.exports.model = function(name) {
-  return definedModels[name]
 }

@@ -1,20 +1,15 @@
 'use strict';
 
-var orm = require('orm');
+var db = require('../db');
 
-module.exports = function(db, models) {
-  var CalendarItem = db.define('calendar_items', { }, {
-    validations: {
-      accepted: orm.validators.required()
-    }
-  });
+var EventSettings = db.define('EventSettings', { });
 
-  CalendarItem.associate = function(models) {
-    CalendarItem.hasOne('owner', models.user, { reverse: 'calendarItems' });
-    CalendarItem.hasOne('invitedBy', models.user, { reverse: 'itemsInvitedTo' });
-    CalendarItem.hasOne('event', models.event, { reverse: 'calendarItems' });
-  }
+EventSettings.associate = function(models) {
+  EventSettings.belongsTo(models.User, { as: 'owner', foreignKey: 'ownerId'});
+  EventSettings.belongsTo(models.User, { as: 'invitedBy', foreignKey: 'invitedById'});
+  EventSettings.belongsTo(models.Event, { as: 'event', foreignKey: 'eventId'});
 
-  models.calendarItem = CalendarItem;
+  EventSettings.hasMany(models.EventReminder, { as: 'reminders', foreignKey: 'settingsId' });
 }
 
+module.exports = EventSettings;

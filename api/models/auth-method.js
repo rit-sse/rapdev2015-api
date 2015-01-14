@@ -1,29 +1,16 @@
-
 'use strict';
 
-var orm = require('orm');
+var db = require('../db');
 
-module.exports = function(db, models) {
-  var AuthMethod = db.define('auth_methods', {
-    authId: String,
-    type: String
-  }, {
-    validations: {
-      authId: [
-        orm.validators.required(),
-        orm.validators.unique(),
-        orm.validators.notEmptyString()
-      ],
-      type: [
-        orm.validators.required(),
-        orm.validators.notEmptyString()
-      ]
-    }
-  });
+var AuthMethod = db.define('AuthMethod', {
+  authId: String,
+  type: String
+});
 
-  AuthMethod.associate = function(models) {
-    AuthMethod.hasOne('user', models.user, { reverse: 'authMethods' });
-  }
+AuthMethod.validatesPresenceOf('authId', 'type');
 
-  models.authMethod = AuthMethod;
+AuthMethod.associate = function(models) {
+  AuthMethod.belongsTo(models.User, { as: 'user',  foreignKey: 'userId' });
 }
+
+module.exports = AuthMethod;
