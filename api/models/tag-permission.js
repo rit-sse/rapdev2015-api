@@ -8,10 +8,10 @@ var TagPermission = db.define('TagPermission', {
 });
 
 TagPermission.validatesPresenceOf('type', 'pending')
-TagPermission.validatesInclusionOf('type', { in: ['Read', 'Owner'] });
+TagPermission.validatesInclusionOf('type', { in: ['Subscriber', 'Owner'] });
 
 TagPermission.associate = function(models) {
-  TagPermission.belongsTo(models.Calendar, { as: 'calendar', foreignKey: 'calendarId' });
+  TagPermission.belongsTo(models.Identity, { as: 'identity', foreignKey: 'identityId' });
   TagPermission.belongsTo(models.Tag, { as: 'tag', foreignKey: 'tagId' });
 }
 

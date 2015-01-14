@@ -4,7 +4,8 @@ var db = require('../db');
 
 var Tag = db.define('Tag', {
   name: String,
-  color: String
+  color: String,
+  visibility: ['Private', 'Public']
 });
 
 Tag.validatesPresenceOf('name', 'color');

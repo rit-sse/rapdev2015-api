@@ -12,7 +12,7 @@ var Todo = db.define('Todo', {
 Todo.validatesPresenceOf('name', 'completed', 'elapsedTime');
 
 Todo.associate = function(models) {
-  Todo.belongsTo(models.Calendar, { as: 'calendar', foreignKey: 'calendarId' });
+  Todo.belongsTo(models.Identity, { as: 'identity', foreignKey: 'identityId' });
   Todo.belongsTo(Todo, { as: 'parent', foreignKey: 'parentId' });
 
   Todo.hasMany(Todo, { as: 'subtasks', foreignKey: 'parentId' });
