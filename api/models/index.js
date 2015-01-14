@@ -1,5 +1,8 @@
+'use strict';
+
 var fs = require('fs');
 var schema = require('../db');
+
 module.exports = function() {
   fs
     .readdirSync(__dirname)
