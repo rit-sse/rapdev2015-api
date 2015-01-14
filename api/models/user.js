@@ -1,43 +1,40 @@
 'use strict';
 
 var db = require('../db');
+var AuthMethod = require('./auth-method');
 
 var User = db.define('User', {
   preferredEmail: String
 });
 
-User.validatesPresenceOf('email');
+User.validatesPresenceOf('preferredEmail');
 
 User.associate = function(models) {
-  User.hasMany(models.AuthMethod, { as: 'authMethods', foreignKey: 'userId' });
+  User.hasMany(AuthMethod, { as: 'authMethods', foreignKey: 'userId' });
   User.hasMany(models.IdentityPermission, { as: 'identityPermissions', foreignKey: 'userId' });
   User.hasMany(models.EventSettings, { as: 'eventSettings', foreignKey: 'userId' });
   User.hasMany(models.TodoSettings, { as: 'todoSettings', foreignKey: 'userId' });
 }
 
-User.createUser = function(config, type, models, cb) {
-  var authMethod = {
+User.createUser = function( config, type, next, cb ) {
+  var am = {
     authId: config.id,
     type: type
   };
   var email = config.email;
-  models.authMethod.find( authMethod , function (err, authMethods) {
-    if(authMethods.length == 0) {
-      models.authMethod.create(authMethod, function(err,results) {
-        var authResults = results;
-
-        User.create({ preferredEmail: email }, function(err, results) {
-          if (err) throw err;
-          var userResult = results;
-          userResult.setAuthMethods(authResults, function(err){
-             cb(userResult);
-          });
+  AuthMethod.findOne( { where: am } , function (err, authMethod) {
+    if(err) return next(err);
+    if(!authMethod) {
+      if(err) return next(err);
+      var user = new User({ preferredEmail: email });
+      user.save(function(err) {
+        if(err) return next(err);
+        user.authMethods.create(am, function(err){
+          cb(user);
         });
       });
     } else {
-      authMethods[0].getUser(function(err, user){
-        cb(user);
-      });
+      cb(authMethod.user());
     }
   });
 }

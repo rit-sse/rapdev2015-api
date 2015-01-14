@@ -38,10 +38,10 @@ app.use(function(req, res, next) {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   if (env != 'development') {
-    res.status(err.status || 500).send(err.message ||'internal server error!');
+    res.status(err.status || err.statusCode || 500).send(err.message ||'internal server error!');
   }
   else {
-    res.status(err.status).send(err);
+    res.status(err.status || err.statusCode || 500).send(err);
   }
 });
 

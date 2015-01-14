@@ -4,6 +4,8 @@ var express = require('express');
 var jwt = require('jsonwebtoken');
 var rq = require('request-promise');
 
+var User = require('../models/user');
+
 var expiresIn = 60;
 
 module.exports = function(app, secret) {
@@ -51,7 +53,7 @@ module.exports = function(app, secret) {
             var fname = resp.first_name;
             var lname = resp.last_name;
             if (email && uid && timezone && fname && lname) {
-              req.models.user.createUser({id: uid, email: email}, provider, req.models, function(user) {
+              User.createUser({id: uid, email: email}, provider, next, function(user) {
                 var response = jwt.sign(user, secret, {expiresInMinutes: expiresIn});
 
                 res.send({token: response, exp: new Date((new Date()).getTime() + expiresIn*60000) });
