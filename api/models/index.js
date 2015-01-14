@@ -1,14 +1,13 @@
 var fs = require('fs');
 var schema = require('../db');
-module.exports.load = function(db, models) {
-  definedModels = models;
+module.exports = function() {
   fs
     .readdirSync(__dirname)
     .filter(function(file) {
       return (file.indexOf('.') !== 0) && (file !== 'index.js');
     })
     .forEach(function(file) {
-      require('./' + file)(db, models);
+      require('./' + file);
     });
 
   Object.keys(schema.models).forEach(function(modelName) {

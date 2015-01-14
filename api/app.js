@@ -14,6 +14,7 @@ var jwt = require('express-jwt');
 var secret = 'SUPAH SEKRIT SECRET';
 
 var app = express();
+var db = require('./db');
 
 app.use(cors());
 app.use(jwt({secret: secret}).unless({path: ['/token']}));
@@ -22,6 +23,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 routes(app, secret);
+models();
+db.autoupdate();
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

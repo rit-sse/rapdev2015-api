@@ -12,8 +12,8 @@ Tag.validatesPresenceOf('name', 'color');
 Tag.associate = function(models) {
   Tag.belongsTo(models.User, { as: 'user', foreignKey: 'userId' });
 
-  Tag.hasAndBelongsToMany('eventSettings', { model: model.EventSettings });
-  Tag.hasAndBelongsToMany('todoSettings', { model: model.Todo });
+  Tag.hasAndBelongsToMany('events', { model: models.Event });
+  Tag.hasAndBelongsToMany('todos', { model: models.Todo });
 }
 
 Tag.createTag = function(tName, tColor, userId, cb) {

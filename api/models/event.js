@@ -28,14 +28,14 @@ var Event = db.define('Event', {
   endTime: Date
 });
 
-Event.validatesPressenceOf('name', 'startTime', 'endTime');
+Event.validatesPresenceOf('name', 'startTime', 'endTime');
 
 Event.associate = function(models) {
   Event.hasMany(models.EventSettings, { as: 'settings', foreignKey: 'eventId'});
   Event.hasMany(models.EventPermission, { as: 'permissions', foreignKey: 'eventId' });
+
+  Event.hasAndBelongsToMany('tags', { model: models.Tag });
 }
-
-
 
 Event.findAllByUserId = function(userId, cb){
   Event.find({user: userId}, cb);

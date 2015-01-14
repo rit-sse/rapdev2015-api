@@ -11,7 +11,7 @@ TodoReminder.validatesPresenceOf('type', 'minutesBefore')
 TodoReminder.validatesInclusionOf('minutesBefore', {in: ['Email']}); // add more later
 
 TodoReminder.associate = function(models) {
-  TodoReminder.belongsTo(models.Todo, { as: 'todo', foreignKey: 'todoId' });
+  TodoReminder.belongsTo(models.TodoSettings, { as: 'todo', foreignKey: 'todoId' });
 }
 
 module.exports = TodoReminder;

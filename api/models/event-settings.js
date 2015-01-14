@@ -10,8 +10,6 @@ EventSettings.associate = function(models) {
   EventSettings.belongsTo(models.Event, { as: 'event', foreignKey: 'eventId'});
 
   EventSettings.hasMany(models.EventReminder, { as: 'reminders', foreignKey: 'settingsId' });
-
-  EventSettings.hasAndBelongsToMany('tags', { model: models.Tag });
 }
 
 module.exports = EventSettings;
