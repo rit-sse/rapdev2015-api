@@ -1,18 +1,18 @@
 'use strict';
 
-var orm = require('orm');
+var db = require('../db');
 
-module.exports = function(db, models) {
+var TagPermission = db.define('TagPermission', {
+  type: String,
+  pending: Boolean
+});
 
-  var TagPermission = db.define('tag_permissions', {
-    type: ['READ', 'EDIT'],
-    pending: Boolean
-  });
+TagPermission.validatesPresenceOf('type', 'pending')
+TagPermission.validatesInclusionOf('type', { in: ['Read', 'Edit'] });
 
-  TagPermission.associate = function(models) {
-    TagPermission.hasOne('user', models.user, { reverse: 'permissions' });
-    TagPermission.hasOne('tag', models.Event, { reverse: 'permissions' });
-  }
-
-  models.tagPermission = TagPermission;
+TagPermission.associate = function(models) {
+  TagPermission.belongsTo(models.User, { as: 'user', foreignKey: 'userId' });
+  TagPermission.belongsTo(models.Tag, { as: 'tag', foreignKey: 'tagId' });
 }
+
+module.exports = TagPermission;

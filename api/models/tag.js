@@ -1,33 +1,24 @@
 'use strict';
 
-var orm = require('orm');
+var db = require('../db');
 
-module.exports = function(db, models) {
-  var Tag = db.define('tags', {
-    name: String,
-    color: String
-  }, {
-    validations: {
-      name: [
-        orm.validators.required(),
-        orm.validators.notEmptyString()
-      ],
-      color: [
-        orm.validators.notEmptyString(),
-        orm.validators.patterns.hexString()
-      ]
-    }
-  });
+var Tag = db.define('Tag', {
+  name: String,
+  color: String
+});
 
-  Tag.associate = function(models) {
-    Tag.hasOne('user', models.user, { reverse: 'tags' });
-    Tag.hasMany('events', models.event, {}, { reverse: 'tags' });
-    Tag.hasMany('todos', models.todo, {}, { reverse: 'tags' });
-  }
+Tag.validatesPresenceOf('name', 'color');
 
-  Tag.createTag = function(tName, tColor, userId, cb) {
-    models.tag.create({name:tName, color:tColor, user_id:userId}, cb);
-  };
+Tag.associate = function(models) {
+  Tag.belongsTo(models.User, { as: 'user', foreignKey: 'userId' });
 
-  models.tag = Tag;
+  Tag.hasAndBelongsToMany('eventSettings', { model: model.EventSettings });
+  Tag.hasAndBelongsToMany('todoSettings', { model: model.Todo });
 }
+
+Tag.createTag = function(tName, tColor, userId, cb) {
+  models.tag.create({name:tName, color:tColor, user_id:userId}, cb);
+};
+
+
+module.exports = Tag;
