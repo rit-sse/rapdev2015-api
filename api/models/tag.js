@@ -10,7 +10,9 @@ var Tag = db.define('Tag', {
 Tag.validatesPresenceOf('name', 'color');
 
 Tag.associate = function(models) {
-  Tag.belongsTo(models.User, { as: 'user', foreignKey: 'userId' });
+  Tag.belongsTo(models.Calendar, { as: 'calendar', foreignKey: 'calendarId' });
+
+  Tag.hasMany(models.TagPermission, { as: 'permissions', foreignKey: 'tagId' });
 
   Tag.hasAndBelongsToMany('events', { model: models.Event });
   Tag.hasAndBelongsToMany('todos', { model: models.Todo });

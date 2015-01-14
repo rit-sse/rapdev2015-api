@@ -31,6 +31,9 @@ var Event = db.define('Event', {
 Event.validatesPresenceOf('name', 'startTime', 'endTime');
 
 Event.associate = function(models) {
+  Event.belongsTo(models.Calendar, { as: 'owner', foreignKey: 'ownerId'});
+  Event.belongsTo(models.Calendar, { as: 'invitedBy', foreignKey: 'invitedById'});
+
   Event.hasMany(models.EventSettings, { as: 'settings', foreignKey: 'eventId'});
   Event.hasMany(models.EventPermission, { as: 'permissions', foreignKey: 'eventId' });
 

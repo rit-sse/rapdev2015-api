@@ -10,11 +10,9 @@ User.validatesPresenceOf('email');
 
 User.associate = function(models) {
   User.hasMany(models.AuthMethod, { as: 'authMethods', foreignKey: 'userId' });
-  User.hasMany(models.EventPermission, { as: 'eventPermissions', foreignKey: 'userId'});
-  User.hasMany(models.TagPermission, { as: 'tagPermissions', foreignKey: 'userId'});
-  User.hasMany(models.EventSettings, { as: 'eventsOwned', foreignKey: 'ownerId'});
-  User.hasMany(models.EventSettings, { as: 'eventsInvitedTo', foreignKey: 'invitedById'});
-  User.hasMany(models.Todo, { as: 'todos', foreignKey: 'userId' });
+  User.hasMany(models.CalendarPermission, { as: 'calendarPermissions', foreignKey: 'userId' });
+  User.hasMany(models.EventSettings, { as: 'eventSettings', foreignKey: 'userId' });
+  User.hasMany(models.TodoSettings, { as: 'todoSettings', foreignKey: 'userId' });
 }
 
 User.createUser = function(config, type, models, cb) {
