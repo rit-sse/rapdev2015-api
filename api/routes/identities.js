@@ -43,19 +43,13 @@ router
         });
     })
     .delete(function(req, res, next) {
-      Identity.find(req.params.id, function(err, result){
-        if (err) {
-          next(err);
-        }
-        else {
-          result.destroy(function(err){
-            if(err){
-              next(err);
-            } else {
-              res.status(204).send({});
-            }
-          })
-        }
+      Identity
+        .query({where: {id: req.params.id}})
+        .fetch()
+        .destroy()
+        .then(function(){
+          res.send(204);
+        });
       })
     });
 
