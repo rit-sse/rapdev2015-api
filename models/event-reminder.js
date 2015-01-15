@@ -10,8 +10,8 @@ var EventReminder = db.define('EventReminder', {
 EventReminder.validatesPresenceOf('type', 'minutesBefore')
 EventReminder.validatesInclusionOf('minutesBefore', {in: ['Email']}); // add more later
 
-EventReminder.associate = function(models) {
-  EventReminder.belongsTo(models.EventSettings, { as: 'eventSettings', foreignKey: 'settingsId' });
+EventReminder.associate = function() {
+  EventReminder.belongsTo(db.models.EventSettings, { as: 'eventSettings', foreignKey: 'settingsId' });
 }
 
 module.exports = EventReminder;

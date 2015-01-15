@@ -15,7 +15,7 @@ module.exports = function() {
 
   Object.keys(schema.models).forEach(function(modelName) {
     if ('associate' in schema.models[modelName]) {
-      schema.models[modelName].associate(schema.models);
+      schema.models[modelName].associate();
     }
   });
 

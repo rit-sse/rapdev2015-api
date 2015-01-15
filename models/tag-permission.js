@@ -10,9 +10,9 @@ var TagPermission = db.define('TagPermission', {
 TagPermission.validatesPresenceOf('type', 'pending')
 TagPermission.validatesInclusionOf('type', { in: ['Subscriber', 'Owner'] });
 
-TagPermission.associate = function(models) {
-  TagPermission.belongsTo(models.Identity, { as: 'identity', foreignKey: 'identityId' });
-  TagPermission.belongsTo(models.Tag, { as: 'tag', foreignKey: 'tagId' });
+TagPermission.associate = function() {
+  TagPermission.belongsTo(db.models.Identity, { as: 'identity', foreignKey: 'identityId' });
+  TagPermission.belongsTo(db.models.Tag, { as: 'tag', foreignKey: 'tagId' });
 }
 
 module.exports = TagPermission;

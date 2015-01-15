@@ -4,11 +4,11 @@ var db = require('../db');
 
 var EventSettings = db.define('EventSettings', { });
 
-EventSettings.associate = function(models) {
-  EventSettings.belongsTo(models.User, { as: 'user', foreignKey: 'userId'});
-  EventSettings.belongsTo(models.Event, { as: 'event', foreignKey: 'eventId'});
+EventSettings.associate = function() {
+  EventSettings.belongsTo(db.models.User, { as: 'user', foreignKey: 'userId'});
+  EventSettings.belongsTo(db.models.Event, { as: 'event', foreignKey: 'eventId'});
 
-  EventSettings.hasMany(models.EventReminder, { as: 'reminders', foreignKey: 'settingsId' });
+  EventSettings.hasMany(db.models.EventReminder, { as: 'reminders', foreignKey: 'settingsId' });
 }
 
 module.exports = EventSettings;

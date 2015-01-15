@@ -13,6 +13,7 @@ module.exports = function(app, secret) {
 
   router.route('/').get(function getToken(req, res, next){
     var provider = req.param('provider');
+    // console.log(req.user)
 
     switch (provider) {
       case 'refresh_token': {
@@ -54,6 +55,7 @@ module.exports = function(app, secret) {
             var lname = resp.last_name;
             if (email && uid && timezone && fname && lname) {
               User.createUser({id: uid, email: email}, provider, next, function(user) {
+                // console.log(user);
                 var response = jwt.sign(user, secret, {expiresInMinutes: expiresIn});
 
                 res.send({token: response, exp: new Date((new Date()).getTime() + expiresIn*60000) });

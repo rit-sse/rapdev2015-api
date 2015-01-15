@@ -1,9 +1,6 @@
-var orm = require('orm');
+var db = require('../db');
 var models = require('../models');
 
 beforeEach(function(done){
-  orm.connect('sqlite://db/test.sqlite', function(err, db) {
-    models.load(db, {});
-    db.drop(db.sync(done));
-  });
+  db.automigrate();
 });
