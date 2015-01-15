@@ -6,6 +6,7 @@ var checkit = require('checkit');
 var User = ('./user');
 
 var AuthMethod = bookshelf.Model.extend({
+  tableName: 'auth_methods',
   initialize: function() {
     this.on('saving', this.validate);
   },
@@ -18,7 +19,7 @@ var AuthMethod = bookshelf.Model.extend({
   },
 
   user: function() {
-    this.belongsTo(User);
+    return this.belongsTo(User);
   }
 
 });
