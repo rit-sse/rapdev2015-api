@@ -9,6 +9,6 @@ module.exports = function(bookshelf) {
       return (file.indexOf('.') !== 0) && (file !== 'index.js');
     })
     .forEach(function(file) {
-      require('./' + file)(bookshelf);
+      require('./' + file);
     });
 }

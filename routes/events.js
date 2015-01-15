@@ -3,7 +3,7 @@
 var express = require('express');
 var router = express.Router();
 var Event = require('../models/event');
-var EventPermission = require('../models/event-permission');
+// var EventPermission = require('../models/event-permission');
 
 router
   .route('/')
