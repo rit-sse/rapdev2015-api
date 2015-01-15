@@ -7,9 +7,14 @@ router
     .get(function(req, res, next) {
        Identity
         .fetchAll()
-        .then(function(model){
-          res.send(model);
+        .mapThen(function(model){
+          model.returnIdentity(model.id, function(model){
+            return model;
+          });
         })
+        .then(function(models){
+          res.send(models);
+        });
     })
     .post(function(req, res, next) {
       Identity.createIdentity(req.body.name,req.body.singular, req.user, function(result) {
@@ -28,20 +33,14 @@ router
         })
       })
     .put(function(req, res, next) {
-      Identity.find(req.params.id, function(err, result){
-        if (err) {
-          next(err);
-        }
-        else {
-          identity.updateAttributes({
-            name: req.body.name,
-            singular: req.body.singular,
-            members: req.body.members
-
-          });
-        }
-      })   
-
+      Identity
+        .where({id: req.params.id})
+        .fetch()
+        .set({
+          name: req.body.name,
+          singular: req.body.singular,
+          members: []
+        });
     })
     .delete(function(req, res, next) {
       Identity.find(req.params.id, function(err, result){

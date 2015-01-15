@@ -22,11 +22,28 @@ Identity.associate = function(models) {
 Identity.createIdentity = function(name,singular,user, cb){
 	Identity
 		.forge({name:name, singular:singular, members:[user]})
-		.save();
+		.save()
+		.then(cb);
 }
 
-Identity.updateIdentity = function(identityId, name, singular, members, cb){
-	identity.find(identityId, function(err, results))
+Identity.updateIdentity = function(identityId, name, singular, memberIds, cb){
+	var members = new Collection(memberIds)
+		.mapThen(function(memberId){
+			User
+				.where({id: memberId})
+				.fetch()
+				.then(function(member){
+					return member;
+				})
+		});
+	Identity
+        .where({id: identityId})
+        .fetch()
+        .set({
+          name: name,
+          singular: singular,
+          members: members
+        })
 }
 
 Identity.returnIdentity = function(identityId, cb){
