@@ -9,9 +9,9 @@ var IdentityPermission = db.define('IdentityPermission', {
 
 IdentityPermission.validatesInclusionOf('type', { in: ['Members', 'Owner'] });
 
-IdentityPermission.associate = function(models) {
-  IdentityPermission.belongsTo(models.User, { as: 'user', foreignKey: 'userId' });
-  IdentityPermission.belongsTo(models.Identity, { as: 'identity', foreignKey: 'identityId' });
+IdentityPermission.associate = function() {
+  IdentityPermission.belongsTo(db.models.User, { as: 'user', foreignKey: 'userId' });
+  IdentityPermission.belongsTo(db.models.Identity, { as: 'identity', foreignKey: 'identityId' });
 }
 
 module.exports = IdentityPermission;

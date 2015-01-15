@@ -10,11 +10,11 @@ var Tag = db.define('Tag', {
 
 Tag.validatesPresenceOf('name', 'color');
 
-Tag.associate = function(models) {
-  Tag.hasMany(models.TagPermission, { as: 'permissions', foreignKey: 'tagId' });
+Tag.associate = function() {
+  Tag.hasMany(db.models.TagPermission, { as: 'permissions', foreignKey: 'tagId' });
 
-  Tag.hasAndBelongsToMany('events', { model: models.Event });
-  Tag.hasAndBelongsToMany('todos', { model: models.Todo });
+  Tag.hasAndBelongsToMany('events', { model: db.models.Event });
+  Tag.hasAndBelongsToMany('todos', { model: db.models.Todo });
 }
 
 Tag.createTag = function(tName, tColor, userId, cb) {

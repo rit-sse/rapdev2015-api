@@ -9,8 +9,8 @@ var AuthMethod = db.define('AuthMethod', {
 
 AuthMethod.validatesPresenceOf('authId', 'type');
 
-AuthMethod.associate = function(models) {
-  AuthMethod.belongsTo(models.User, { as: 'user',  foreignKey: 'userId' });
+AuthMethod.associate = function() {
+  AuthMethod.belongsTo(db.models.User, { as: 'user',  foreignKey: 'userId' });
 }
 
 module.exports = AuthMethod;

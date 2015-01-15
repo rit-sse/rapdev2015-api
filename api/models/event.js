@@ -30,55 +30,11 @@ var Event = db.define('Event', {
 
 Event.validatesPresenceOf('name', 'startTime', 'endTime');
 
-Event.associate = function(models) {
-  Event.belongsTo(models.Identity, { as: 'owner', foreignKey: 'ownerId'});
-  Event.belongsTo(models.Identity, { as: 'invitedBy', foreignKey: 'invitedById'});
+Event.associate = function() {
+  Event.hasMany(db.models.EventSettings, { as: 'settings', foreignKey: 'eventId'});
+  Event.hasMany(db.models.EventPermission, { as: 'permissions', foreignKey: 'eventId' });
 
-  Event.hasMany(models.EventSettings, { as: 'settings', foreignKey: 'eventId'});
-  Event.hasMany(models.EventPermission, { as: 'permissions', foreignKey: 'eventId' });
-
-  Event.hasAndBelongsToMany('tags', { model: models.Tag });
-}
-
-Event.findAllByUserId = function(userId, cb){
-  Event.find({user: userId}, cb);
-}
-
-Event.findById = function(eventId, cb) {
-  Event.find({id: eventId}, cb);
-}
-
-Event.updateEvent = function(eventId, name, description, startTime, endTime, cb) {
-  Event.get(eventId, function(err, event) {
-    if (err) {
-      cb(err, event);
-    }
-    else {
-      event.save({  name: name, description: description,
-                    startTime: startTime, endTime: endTime}, cb);
-    }
-  });
-}
-
-Event.deleteEvent = function(eventId, cb) {
-  Event.find({id: eventId}).remove(cb);
-}
-
-Event.createEvent = function(name, description, startTime, endTime, userId, models, cb) {
-  models.user.find({id: userId}, function(err,user){
-    if (err){
-      cb(err);
-    } else {
-      models.event.create({name:name, description: description, startTime: startTime, endTime: endTime}, function(err,newEvent){
-        if (err){
-          cb(err);
-        } else {
-          var foundUser = user[0];
-          newEvent.setUser(foundUser, cb);
-        }
-      });
-    }
-  });
+  Event.hasAndBelongsToMany('tags', { model: db.models.Tag });
 }
 
 module.exports = Event;

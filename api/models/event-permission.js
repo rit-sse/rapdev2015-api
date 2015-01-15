@@ -10,9 +10,9 @@ var EventPermission = db.define('EventPermission', {
 EventPermission.validatesPresenceOf('type', 'pending')
 EventPermission.validatesInclusionOf('type', { in: ['Read', 'Owner'] });
 
-EventPermission.associate = function(models) {
-  EventPermission.belongsTo(models.Identity, { as: 'identity', foreignKey: 'identityId' });
-  EventPermission.belongsTo(models.Event, { as: 'event', foreignKey: 'eventId' });
+EventPermission.associate = function() {
+  EventPermission.belongsTo(db.models.Identity, { as: 'identity', foreignKey: 'identityId' });
+  EventPermission.belongsTo(db.models.Event, { as: 'event', foreignKey: 'eventId' });
 }
 
 module.exports = EventPermission;
