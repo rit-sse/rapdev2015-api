@@ -18,4 +18,24 @@ Identity.associate = function(models) {
   Identity.hasMany(models.Todo, { as: 'todos', foreignKey: 'identityId' });
 }
 
+
+Identity.createIdentity = function(name,singular,user, cb){
+	Identity
+		.forge({name:name, singular:singular, members:[user]})
+		.save();
+}
+
+Identity.updateIdentity = function(identityId, name, singular, members, cb){
+	identity.find(identityId, function(err, results))
+}
+
+Identity.returnIdentity = function(identityId, cb){
+	Identity
+	.where({id: identityId})
+	.fetch()
+	.set("url", "/identities/" + identityId)
+	.then(cb);
+
+}
+
 module.exports = Identity;
