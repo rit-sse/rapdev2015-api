@@ -10,12 +10,14 @@ var routes = require('./routes');
 var models = require('./models');
 var jwt = require('express-jwt');
 
-var secret = 'SUPAH SEKRIT SECRET';
+var fs = require('fs');
+
+var secret = fs.readFileSync('./secret.key');
 
 var app = express();
 
 app.use(cors());
-app.use(jwt({secret: secret}).unless({path: ['/token']}));
+app.use(jwt({secret: secret, algorithm: 'RS256'}).unless({path: ['/token']}));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));

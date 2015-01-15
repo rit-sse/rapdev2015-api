@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "watch": "supervisor ./bin/www"
+    "watch": "supervisor ./bin/www",
+    "keygen": "node ./keygen.js"
   },
   "dependencies": {
     "bluebird": "^2.7.1",
@@ -17,6 +18,7 @@
     "express-jwt": "^0.6.2",
     "jsonwebtoken": "^3.2.0",
     "knex": "^0.7.3",
+    "keypair": "^1.0.0",
     "morgan": "~1.5.1",
     "mysql": "~2.5.4",
     "request-promise": "^0.3.2",
