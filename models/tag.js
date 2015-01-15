@@ -1,25 +1,38 @@
 'use strict';
 
-var db = require('../db');
+var bookshelf = require('../db');
+var checkit = require('checkit');
 
-var Tag = db.define('Tag', {
-  name: String,
-  color: String,
-  visibility: ['Private', 'Public']
+var Todo = require('./todo');
+var Event = require('./event');
+var Permission = require('./permission');
+
+var Tag = bookshelf.Model.extend({
+  tableName: 'tags',
+  initialize: function() {
+    this.on('saving', this.validate);
+  },
+
+  validate: function() {
+    return checkit({
+      name: 'required',
+      color: 'required',
+      visibility: ['required'] //private public
+    }).run(this.attributes);
+  },
+
+  permissions: function() {
+    return this.morphMany(Permission, 'subject');
+  },
+
+  todos: function() {
+    return this.belongsToMany(Todo);
+  },
+
+  events: function() {
+    return this.belongsToMany(Event);
+  }
+
 });
-
-Tag.validatesPresenceOf('name', 'color');
-
-Tag.associate = function() {
-  Tag.hasMany(db.models.TagPermission, { as: 'permissions', foreignKey: 'tagId' });
-
-  Tag.hasAndBelongsToMany('events', { model: db.models.Event });
-  Tag.hasAndBelongsToMany('todos', { model: db.models.Todo });
-}
-
-Tag.createTag = function(tName, tColor, userId, cb) {
-  models.tag.create({name:tName, color:tColor, user_id:userId}, cb);
-};
-
 
 module.exports = Tag;
