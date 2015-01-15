@@ -14,7 +14,8 @@ This is easy to forget to do, but reduces coupling between client and server.
 level of the API.
 * _Keep it sane_ - Required paramaters should be part of the url - avoid required querystring
 parameters where possible.
-* _Remember method definitions_
+* _Remember method definitions_ - Use `GET` for retreiving resources, `POST` for creating new
+resources, `PUT` for replacing/updating a resource, and `DELETE` for removing a resource.
 * _Look to others for inspiration_ - For example, https://api.github.com does a lot right.
 The [Heroku API Design Guidelines](https://github.com/interagent/http-api-design)
 are also a good place to start, even if we won't follow them in full.
@@ -88,6 +89,27 @@ A single Identity object with all its details
     + id (required, number, `2`) ... Numeric `id` of the Identity to perform action with. Has example value.
 
 ### Retrieve an Identity [GET]
++ Response 200 (application/json)
+
+        { 
+            "url": "/identities/2"
+            "id": 2, 
+            "name": "rit-sse",
+            "members": [{
+                "url": "/users/1",
+                "id": 1,
+                "email": "dude@example.com"
+            }]
+        }
+        
+### Update an Identity [PUT]
++ Request (application/json)
+
+        { 
+            "name": "rit-sse",
+            "members": [1]
+        }
+        
 + Response 200 (application/json)
 
         { 
