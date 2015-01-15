@@ -3,6 +3,22 @@ FORMAT: 1A
 # cdar
 A calendar API.
 
+All endpoints require authorization in the form of an `Authorization` header with value 
+`Bearer <token>` where the token can be retrieved from the `/token` endpoint - which is,
+of course, exempt from this authorization requirement.
+
+## Design Guidelines
+* _Stay RESTful_ - Maintain canonical URLs for all resources and include them in responses.
+This is easy to forget to do, but reduces coupling between client and server.
+* _Keep it short_ - If a resource is globally uniquely identifiable, it should probably be at the top
+level of the API.
+* _Keep it sane_ - Required paramaters should be part of the url - avoid required querystring
+parameters where possible.
+* _Remember method definitions_
+* _Look to others for inspiration_ - For example, https://api.github.com does a lot right.
+The [Heroku API Design Guidelines](https://github.com/interagent/http-api-design)
+are also a good place to start, even if we won't follow them in full.
+
 ## Todos
 * Add optional querystring parameters to those types which require filtering over time.
 * Add querystring parameters for managing the pagination of results.
