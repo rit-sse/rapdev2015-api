@@ -8,8 +8,10 @@
     "watch": "supervisor ./bin/www"
   },
   "dependencies": {
+    "bluebird": "^2.7.1",
     "body-parser": "~1.10.1",
     "bookshelf": "^0.7.9",
+    "checkit": "^0.2.0-pre",
     "cors": "^2.5.2",
     "express": "~4.10.7",
     "express-jwt": "^0.6.2",

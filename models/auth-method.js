@@ -1,16 +1,26 @@
 'use strict';
 
-var db = require('../db');
+var bookshelf = require('../db');
+var checkit = require('checkit');
 
-var AuthMethod = db.define('AuthMethod', {
-  authId: String,
-  type: String
+var User = ('./user');
+
+var AuthMethod = bookshelf.Model.extend({
+  initialize: function() {
+    this.on('saving', this.validate);
+  },
+
+  validate: function() {
+    return checkit({
+      authId: 'required',
+      type: 'required'
+    }).run(this.attributes);
+  },
+
+  user: function() {
+    this.belongsTo(User);
+  }
+
 });
-
-AuthMethod.validatesPresenceOf('authId', 'type');
-
-AuthMethod.associate = function() {
-  AuthMethod.belongsTo(db.models.User, { as: 'user',  foreignKey: 'userId' });
-}
 
 module.exports = AuthMethod;
