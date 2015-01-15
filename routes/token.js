@@ -36,10 +36,10 @@ module.exports = function(app, secret) {
           return next({error: 'couldn\'t find token in authorization header', status: 401}); //no token
         }
 
-        jwt.verify(token, secret, {}, function(err, decoded) {
+        jwt.verify(token, secret, {algorithm: 'RS256'}, function(err, decoded) {
           if (err) return next({error: 'invalid token', status: 401});
 
-          var response = jwt.sign(decoded, secret, {expiresInMinutes: expiresIn});
+          var response = jwt.sign(decoded, secret, {expiresInMinutes: expiresIn, algorithm: 'RS256'});
 
           res.send({token: response, exp: new Date((new Date()).getTime() + expiresIn*60000) });
         });
@@ -56,7 +56,7 @@ module.exports = function(app, secret) {
             if (email && uid && timezone && fname && lname) {
               User.createUser({id: uid, email: email}, provider, next, function(user) {
                 // console.log(user);
-                var response = jwt.sign(user, secret, {expiresInMinutes: expiresIn});
+                var response = jwt.sign(user, secret, {expiresInMinutes: expiresIn, algorithm: 'RS256'});
 
                 res.send({token: response, exp: new Date((new Date()).getTime() + expiresIn*60000) });
               });

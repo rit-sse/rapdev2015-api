@@ -19,7 +19,7 @@ var app = express();
 var db = require('./db');
 
 app.use(cors());
-app.use(jwt({secret: secret}).unless({path: ['/token']}));
+app.use(jwt({secret: secret, algorithm: 'RS256'}).unless({path: ['/token']}));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
