@@ -16,6 +16,8 @@ level of the API.
 parameters where possible.
 * _Remember method definitions_ - Use `GET` for retreiving resources, `POST` for creating new
 resources, `PUT` for replacing/updating a resource, and `DELETE` for removing a resource.
+`PATCH` can be useful for objects with many fields requiring frequent updates, but lacks
+idempotency so can lead to awkward race conditions, so its use should be minified.
 * _Look to others for inspiration_ - For example, https://api.github.com does a lot right.
 The [Heroku API Design Guidelines](https://github.com/interagent/http-api-design)
 are also a good place to start, even if we won't follow them in full.
