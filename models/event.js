@@ -3,8 +3,9 @@
 var bookshelf = require('../db');
 var checkit = require('checkit');
 
-var User = ('./user');
-
+var Settings = require('./settings');
+var Permission = require('./permission');
+var Tag = require('./tag');
 
 function startTimeBeforeEndTime(v, next) {
   var start = new Date(v);

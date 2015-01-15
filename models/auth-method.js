@@ -3,7 +3,7 @@
 var bookshelf = require('../db');
 var checkit = require('checkit');
 
-var User = ('./user');
+var User = require('./user');
 
 var AuthMethod = bookshelf.Model.extend({
   tableName: 'auth_methods',
