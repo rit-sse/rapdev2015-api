@@ -11,7 +11,9 @@ var routes = require('./routes');
 var models = require('./models');
 var jwt = require('express-jwt');
 
-var secret = 'SUPAH SEKRIT SECRET';
+var fs = require('fs');
+
+var secret = fs.readFileSync('./secret.key');
 
 var app = express();
 var db = require('./db');

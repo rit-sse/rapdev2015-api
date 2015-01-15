@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "watch": "supervisor ./bin/www"
+    "watch": "supervisor ./bin/www",
+	"keygen": "node ./keygen.js"
   },
   "dependencies": {
     "body-parser": "~1.10.1",
@@ -15,6 +16,7 @@
     "jsonwebtoken": "^3.2.0",
     "jugglingdb": "^0.3.0",
     "jugglingdb-sqlite3": "0.0.5",
+    "keypair": "^1.0.0",
     "morgan": "~1.5.1",
     "mysql": "~2.5.4",
     "request-promise": "^0.3.2",
