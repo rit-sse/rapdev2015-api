@@ -1,6 +1,11 @@
 'use strict';
 
-var db = require("../db");
+var bookshelf = require('../db');
+var checkit = require('checkit');
+
+var Settings = require('./settings');
+var Permission = require('./permission');
+var Tag = require('./tag');
 
 function startTimeBeforeEndTime(v, next) {
   var start = new Date(v);
@@ -21,20 +26,31 @@ function isDate(v, next) {
 }
 
 
-var Event = db.define('Event', {
-  name: String,
-  description: String,
-  startTime: Date,
-  endTime: Date
+var Event = bookshelf.Model.extend({
+  tableName: 'events',
+  initialize: function() {
+    this.on('saving', this.validate);
+  },
+
+  validate: function() {
+    return checkit({
+      name: 'required',
+      startTime: 'required',
+      endTime: 'required'
+    }).run(this.attributes);
+  },
+
+  user: function() {
+    return this.morphMany(Settings, 'settable');
+  },
+
+  permissions: function() {
+    return this.morphMany(Permission, 'subject');
+  },
+
+  tags: function() {
+    return this.belongsToMany(Tag);
+  }
 });
-
-Event.validatesPresenceOf('name', 'startTime', 'endTime');
-
-Event.associate = function() {
-  Event.hasMany(db.models.EventSettings, { as: 'settings', foreignKey: 'eventId'});
-  Event.hasMany(db.models.EventPermission, { as: 'permissions', foreignKey: 'eventId' });
-
-  Event.hasAndBelongsToMany('tags', { model: db.models.Tag });
-}
 
 module.exports = Event;

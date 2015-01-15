@@ -1,24 +1,45 @@
 'use strict';
 
-var db = require('../db');
+var bookshelf = require('../db');
+var checkit = require('checkit');
 
-var Todo = db.define('Todo', {
-  name: String,
-  dueDate: Date,
-  completed: Boolean,
-  elapsedTime: Number
+var Identity = require('./permission');
+var Tag = require('./tag');
+
+var Todo = bookshelf.Model.extend({
+  tableName: 'todos',
+  initialize: function() {
+    this.on('saving', this.validate);
+  },
+
+  validate: function() {
+    return checkit({
+      name: 'required',
+      completed: 'required',
+      elapsedTime: 'required'
+    }).run(this.attributes);
+  },
+
+  identity: function() {
+    return this.belongsTo(Identity);
+  },
+
+  parent: function() {
+    return this.belongsTo(Todo);
+  },
+
+  subtasks: function() {
+    return this.hasMany(Todo);
+  },
+
+  settings: function() {
+    return this.morphMany(Settings, 'settable');
+  },
+
+  tags: function() {
+    return this.belongsToMany(Tag);
+  }
+
 });
-
-Todo.validatesPresenceOf('name', 'completed', 'elapsedTime');
-
-Todo.associate = function() {
-  Todo.belongsTo(db.models.Identity, { as: 'identity', foreignKey: 'identityId' });
-  Todo.belongsTo(Todo, { as: 'parent', foreignKey: 'parentId' });
-
-  Todo.hasMany(Todo, { as: 'subtasks', foreignKey: 'parentId' });
-  Todo.hasMany(db.models.TodoSettings, { as: 'settings', foreignKey: 'todoId' });
-
-  Todo.hasAndBelongsToMany('tags', { model: db.models.Tag });
-}
 
 module.exports = Todo;

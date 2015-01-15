@@ -1,5 +1,7 @@
-var Schema = require('jugglingdb').Schema
 var env = process.env.NODE_ENV || 'development';
-var conf = require('./config/orm')[env];
+var config = require('./knexfile');
+var knex = require('knex')(config[env]);
 
-module.exports = new Schema(conf.adapter, conf);
+var bookshelf = require('bookshelf')(knex);
+
+module.exports = bookshelf;
