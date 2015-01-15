@@ -8,7 +8,6 @@ RAPDEV2015 API
 
 ## Setup
 
-    cd api
     npm install
     npm run keygen
     npm start
