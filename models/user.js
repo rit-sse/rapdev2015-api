@@ -2,7 +2,6 @@
 
 var bookshelf = require('../db');
 var checkit = require('checkit');
-var Promise = require('bluebird');
 
 var User = bookshelf.Model.extend({
   tableName: 'users',
