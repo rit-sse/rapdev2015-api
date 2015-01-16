@@ -2,6 +2,7 @@
 
 var bookshelf = require('../db');
 var checkit = require('checkit');
+var Promise = require('bluebird');
 
 var AuthMethod = bookshelf.Model.extend({
   tableName: 'auth_methods',
