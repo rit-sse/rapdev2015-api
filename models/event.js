@@ -24,6 +24,7 @@ function isDate(v, next) {
 
 var Event = bookshelf.Model.extend({
   tableName: 'events',
+  hasTimestamps: true,
   initialize: function() {
     this.on('saving', this.validate);
   },

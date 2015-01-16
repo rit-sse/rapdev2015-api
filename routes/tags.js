@@ -4,19 +4,21 @@ var router = express.Router();
 router
   .route('/')
     .get(function(req, res, next) {
-      req.models.tag.find({user_id: req.user.id}, function(err, tags) {
-        res.send(tags);
-      });
+      console.log(req.user);
+      res.send(req.user);
+      // req.models.tag.find({user_id: req.user.id}, function(err, tags) {
+      //   res.send(tags);
+      // });
     })
     .post(function(req, res, next) {
-      req.models.tag.createTag(req.body.name, req.body.color, req.user.id, function(err, result) {
-        if (err) {
-          next(err);
-        }
-        else {
-          res.send(result);
-        }
-      });
+      // req.models.tag.createTag(req.body.name, req.body.color, req.user.id, function(err, result) {
+      //   if (err) {
+      //     next(err);
+      //   }
+      //   else {
+      //     res.send(result);
+      //   }
+      // });
     });
 
 router
