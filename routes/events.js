@@ -1,27 +1,22 @@
 'use strict';
+
 var express = require('express');
 var router = express.Router();
+var Event = require('../models/event');
+// var EventPermission = require('../models/event-permission');
 
 router
   .route('/')
     .get(function(req, res, next) {
-      req.models.event.findAllByUserId(req.user.id,function(err,results){
-        if (err){
-          next(err);
-        } else {
-          res.send(results);
-        }
-      });
+      var user = req.user;
+      res.send(user.getEvents());
     })
     .post(function(req, res, next) {
-      req.models.event.createEvent(req.body.name, req.body.description, req.body.startTime,
-                              req.body.endTime, req.user.id, req.models, function (err, result){
-        if (err){
-          res.send(err);
-        } else {
-          res.send(result);
-        }
-      })
+      var user = req.user;
+      var event = new Event(req.body);
+      this.events.create(event, function(err) {
+        if(err) return next(err);
+      });
     });
 
 router
