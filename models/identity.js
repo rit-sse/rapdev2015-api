@@ -2,6 +2,7 @@
 
 var bookshelf = require('../db');
 var checkit = require('checkit');
+var Promise = require('bluebird');
 
 var Identity = bookshelf.Model.extend({
   tableName: 'identities',
@@ -31,10 +32,19 @@ var Identity = bookshelf.Model.extend({
 
 },{
   createIdentity: function(name,singular,user,cb){
-    Identity
-    .forge({name:name, singular:singular, members:[user]})
+    return Identity
+    .forge({name:name, singular:singular})
     .save()
-    .then(cb);
+    .then(function(identity){
+      var Permission = bookshelf.model('Permission');
+      return Permission
+        .forge({pending: false, type: 'Owner', authorizee_id: user.id, authorizee_type: 'users',
+              subject_id: identity.id, subject_type: 'identities'})
+        .save()
+        .then(function(permission){
+          return Promise.resolve(identity);
+        })
+    });
   },
   updateIdentity: function(identityId, name, singular, memberIds, cb){
     var members = new Collection(memberIds)

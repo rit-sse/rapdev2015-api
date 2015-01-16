@@ -7,17 +7,13 @@ router
     .get(function(req, res, next) {
        Identity
         .fetchAll()
-        .mapThen(function(model){
-          model.returnIdentity(model.id, function(model){
-            return model;
-          });
-        })
         .then(function(models){
           res.send(models);
         });
     })
     .post(function(req, res, next) {
-      Identity.createIdentity(req.body.name,req.body.singular, req.user, function(result) {
+      Identity.createIdentity(req.body.name,req.body.singular, req.user)
+      .then(function(result) {
         res.send(result);
       });
     });
