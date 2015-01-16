@@ -4,7 +4,8 @@ var bookshelf = require('../db');
 var checkit = require('checkit');
 
 var Permission = bookshelf.Model.extend({
-  tableName: 'auth_methods',
+  tableName: 'permissions',
+  hasTimestamps: true,
   initialize: function() {
     this.on('saving', this.validate);
   },

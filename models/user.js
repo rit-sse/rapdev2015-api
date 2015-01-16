@@ -6,6 +6,7 @@ var Promise = require('bluebird');
 
 var User = bookshelf.Model.extend({
   tableName: 'users',
+  hasTimestamps: true,
   initialize: function() {
     this.on('saving', this.validate);
   },

@@ -5,6 +5,7 @@ var checkit = require('checkit');
 
 var Settings = bookshelf.Model.extend({
   tableName: 'settings',
+  hasTimestamps: true,
   initialize: function() {
     this.on('saving', this.validate);
   },

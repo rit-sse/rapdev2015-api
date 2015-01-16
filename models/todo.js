@@ -5,6 +5,7 @@ var checkit = require('checkit');
 
 var Todo = bookshelf.Model.extend({
   tableName: 'todos',
+  hasTimestamps: true,
   initialize: function() {
     this.on('saving', this.validate);
   },

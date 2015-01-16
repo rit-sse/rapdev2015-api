@@ -5,6 +5,7 @@ var checkit = require('checkit');
 
 var Reminder = bookshelf.Model.extend({
   tableName: 'reminders',
+  hasTimestamps: true,
   initialize: function() {
     this.on('saving', this.validate);
   },

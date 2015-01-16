@@ -4,7 +4,7 @@ var express = require('express');
 var jwt = require('jsonwebtoken');
 var rq = require('request-promise');
 
-var User = require('../models/user');
+var AuthMethod = require('../models/auth-method');
 
 var expiresIn = 60;
 
@@ -53,8 +53,8 @@ module.exports = function(app, secret, pub) {
             var fname = resp.first_name;
             var lname = resp.last_name;
             if (email && uid && timezone && fname && lname) {
-              User
-                .createUser(uid, provider, email)
+              AuthMethod
+                .userForAuthMethod(uid, provider, email)
                 .then(function(user){
                   var response = jwt.sign(user, secret, {expiresInMinutes: expiresIn, algorithm: 'RS256'});
 
