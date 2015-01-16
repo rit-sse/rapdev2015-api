@@ -4,61 +4,36 @@ var router = express.Router();
 router
   .route('/')
     .get(function(req, res, next) {
-      req.models.tag.find({user_id: req.user.id}, function(err, tags) {
-        res.send(tags);
-      });
+      var userid = req.user.id;
     })
     .post(function(req, res, next) {
-      req.models.tag.createTag(req.body.name, req.body.color, req.user.id, function(err, result) {
-        if (err) {
-          next(err);
-        }
-        else {
-          res.send(result);
-        }
+      var userid = req.user.id;
+      console.log(req.body); 
+      var identityid = req.body.identityId;
+      Identity({id:identityid}).fetch({require:true, withRelated:['permissions']}).then(function(model){
+        model.related('permissions').where({authorizee_id:userid, authorizee_type:'users'}).then(function(permission) {
+          if(permission.id) {
+            new Tag().save({name:req.body.name, color:req.body.color, visibility:req.body.visibility}).then(function(newTag) {
+              new Permission({subject_id:newTag.id, subject_type:'tags', authorizee_id:identityid, authorizee_type:'identities'}).save().then(function() {
+                res.send(newTag);
+              });
+            });
+
+          } else {
+            next(); //TODO: handle "properly"
+          }
+        });
       });
     });
 
 router
   .route('/:id')
     .get(function(req, res, next) {
-      req.models.tag.get(req.params.id, function(err, tag) {
-          if(err) {
-            next({error: err, status: 422});
-          } else {
-            res.send(tag);
-          }
-      });
     })
     .put(function(req, res, next) {
-      req.models.tag.get(req.params.id, function(err, tag) {
-        if (err) {
-          next({error: err, status: 422});
-        }
-        else {
-          tag.name = req.body.name || tag.name;
-          tag.color = req.body.color || tag.color;
-          tag.save(function(err) {
-            if(err) {
-              next({error: err, status: 422});
-            } else {
-              res.send(tag);
-            }
-          });
-        }
-      });
 
     })
     .delete(function(req, res, next) {
-      req.models.tag.get(req.params.id, function(err, tag) {
-        tag.remove(function(err) {
-          if(err) {
-            next({error: err, status: 422});
-          } else {
-            res.status(204).send({});
-          }
-        });
-      });
     });
 
 module.exports = function(app) {
