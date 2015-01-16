@@ -5,10 +5,21 @@ router
   .route('/')
     .get(function(req, res, next) {
       var userid = req.user.id;
+      User({id:userid}).fetch({withRelated:['permissions']}).then(function(user) {
+        user.related('permissions').mapThen(function(permission) {
+          return permission.related('subject').fetch() 
+        }).mapThen(function(userIdentity) {
+          return userIdentity.tagPermissions();
+        }).mapThen(function(tagPermission) {
+          return tagPermission.related('subject').fetch();
+        }).then(function(tags) {
+          res.send(tags);
+        });
+      });
     })
+
     .post(function(req, res, next) {
       var userid = req.user.id;
-      console.log(req.body); 
       var identityid = req.body.identityId;
       Identity({id:identityid}).fetch({require:true, withRelated:['permissions']}).then(function(model){
         model.related('permissions').where({authorizee_id:userid, authorizee_type:'users'}).then(function(permission) {
