@@ -40,11 +40,17 @@ router
     })
     .delete(function(req, res, next) {
       Identity
-        .query({where: {id: req.params.id}})
+        .where({id: req.params.id})
         .fetch()
-        .destroy()
+        .then(function(identity){
+          return identity
+            .destroy();
+        })
         .then(function(){
-          res.send(204);
+          res.status(204).send({});
+        })
+        .catch(function(err){
+          console.log(err);
         });
       });
 

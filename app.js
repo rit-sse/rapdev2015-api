@@ -41,6 +41,7 @@ app.use(function(err, req, res, next) {
     res.status(err.status || err.statusCode || 500).send(err.message || 'internal server error!');
   }
   else {
+  	console.log(err.stack);
     res.status(err.status || err.statusCode || 500).send(err);
   }
 });
