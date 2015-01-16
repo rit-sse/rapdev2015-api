@@ -34,7 +34,7 @@ var User = bookshelf.Model.extend({
 
     return AuthMethod.where(am).fetch().then(function(auth){
       if(auth) {
-        return auth.user();
+        return auth.related('user').fetch();
       } else {
         return AuthMethod.forge(am).save().then(function(auth){
           return User

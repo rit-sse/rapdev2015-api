@@ -13,16 +13,17 @@ var jwt = require('express-jwt');
 var fs = require('fs');
 
 var secret = fs.readFileSync('./secret.key');
+var pub = fs.readFileSync('./secret.pub')
 
 var app = express();
 
 app.use(cors());
-app.use(jwt({secret: secret, algorithm: 'RS256'}).unless({path: ['/token']}));
+app.use(jwt({secret: pub}).unless({path: ['/token']}));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-routes(app, secret);
+routes(app, secret, pub);
 models();
 
 app.use(function(req, res, next) {

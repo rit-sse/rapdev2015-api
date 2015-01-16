@@ -8,7 +8,7 @@ var User = require('../models/user');
 
 var expiresIn = 60;
 
-module.exports = function(app, secret) {
+module.exports = function(app, secret, pub) {
   var router = express.Router();
 
   router.route('/').get(function getToken(req, res, next){
@@ -35,7 +35,7 @@ module.exports = function(app, secret) {
           return next({error: 'couldn\'t find token in authorization header', status: 401}); //no token
         }
 
-        jwt.verify(token, secret, {algorithm: 'RS256'}, function(err, decoded) {
+        jwt.verify(token, pub, {algorithm: 'RS256'}, function(err, decoded) {
           if (err) return next({error: 'invalid token', status: 401});
 
           var response = jwt.sign(decoded, secret, {expiresInMinutes: expiresIn, algorithm: 'RS256'});
@@ -56,7 +56,7 @@ module.exports = function(app, secret) {
               User
                 .createUser(uid, provider, email)
                 .then(function(user){
-                  var response = jwt.sign(user.toJSON(), secret, {expiresInMinutes: expiresIn, algorithm: 'RS256'});
+                  var response = jwt.sign(user, secret, {expiresInMinutes: expiresIn, algorithm: 'RS256'});
 
                   res.send({token: response, exp: new Date((new Date()).getTime() + expiresIn*60000) });
                 })
