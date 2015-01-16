@@ -2,6 +2,7 @@
 
 var bookshelf = require('../db');
 var checkit = require('checkit');
+var validators = require('./validators');
 
 var Reminder = bookshelf.Model.extend({
   tableName: 'reminders',
@@ -13,7 +14,7 @@ var Reminder = bookshelf.Model.extend({
   validate: function() {
     return checkit({
       minutesBefore: 'required',
-      type: ['required'] // in email
+      type: ['required', validators.includes(['Email'])]
     }).run(this.attributes);
   },
 
