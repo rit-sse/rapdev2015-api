@@ -28,7 +28,15 @@ var Identity = bookshelf.Model.extend({
 
   todos: function() {
     return this.hasMany('Todo');
+  },
+  returnIdentity: function(identityId, cb){
+      return this
+      .set("url", "/identities/" + identityId)
+      //.then(cb);
   }
+
+
+
 
 },{
   createIdentity: function(name,singular,user,cb){
@@ -64,14 +72,8 @@ var Identity = bookshelf.Model.extend({
           singular: singular,
           members: members
         });
-  },
-  returnIdentity: function(identityId, cb){
-    Identity
-      .where({id: identityId})
-      .fetch()
-      .set("url", "/identities/" + identityId)
-      .then(cb);
   }
+
 });
 
 
