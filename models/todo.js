@@ -3,9 +3,6 @@
 var bookshelf = require('../db');
 var checkit = require('checkit');
 
-var Identity = require('./permission');
-var Tag = require('./tag');
-
 var Todo = bookshelf.Model.extend({
   tableName: 'todos',
   initialize: function() {
@@ -21,25 +18,25 @@ var Todo = bookshelf.Model.extend({
   },
 
   identity: function() {
-    return this.belongsTo(Identity);
+    return this.belongsTo('Identity');
   },
 
   parent: function() {
-    return this.belongsTo(Todo);
+    return this.belongsTo('Todo');
   },
 
   subtasks: function() {
-    return this.hasMany(Todo);
+    return this.hasMany('Todo');
   },
 
   settings: function() {
-    return this.morphMany(Settings, 'settable');
+    return this.morphMany('Settings', 'settable');
   },
 
   tags: function() {
-    return this.belongsToMany(Tag);
+    return this.belongsToMany('Tag');
   }
 
 });
 
-module.exports = Todo;
+module.exports = bookshelf.model('Todo', Todo);

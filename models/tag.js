@@ -3,10 +3,6 @@
 var bookshelf = require('../db');
 var checkit = require('checkit');
 
-var Todo = require('./todo');
-var Event = require('./event');
-var Permission = require('./permission');
-
 var Tag = bookshelf.Model.extend({
   tableName: 'tags',
   initialize: function() {
@@ -22,17 +18,17 @@ var Tag = bookshelf.Model.extend({
   },
 
   permissions: function() {
-    return this.morphMany(Permission, 'subject');
+    return this.morphMany('Permission', 'subject');
   },
 
   todos: function() {
-    return this.belongsToMany(Todo);
+    return this.belongsToMany('Todo');
   },
 
   events: function() {
-    return this.belongsToMany(Event);
+    return this.belongsToMany('Event');
   }
 
 });
 
-module.exports = Tag;
+module.exports = bookshelf.model('Tag', Tag);

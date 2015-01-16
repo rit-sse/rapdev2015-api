@@ -3,10 +3,6 @@
 var bookshelf = require('../db');
 var checkit = require('checkit');
 
-var User = require('./user');
-var Permission = require('./permission');
-var Todo = require('./todo')
-
 var Identity = bookshelf.Model.extend({
   tableName: 'identities',
   initialize: function() {
@@ -21,17 +17,17 @@ var Identity = bookshelf.Model.extend({
   },
 
   permissions: function() {
-    return this.morphMany(Permission, 'subject');
+    return this.morphMany('Permission', 'subject');
   },
 
   eventAndTagPermissions: function() {
-    return this.morphMany(Permission, 'subject');
+    return this.morphMany('Permission', 'subject');
   },
 
   todos: function() {
-    return this.hasMany(Todo);
+    return this.hasMany('Todo');
   }
 
 });
 
-module.exports = Identity;
+module.exports = bookshelf.model('Identity', Identity);

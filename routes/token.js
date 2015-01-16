@@ -13,7 +13,6 @@ module.exports = function(app, secret) {
 
   router.route('/').get(function getToken(req, res, next){
     var provider = req.param('provider');
-    // console.log(req.user)
 
     switch (provider) {
       case 'refresh_token': {
@@ -54,14 +53,19 @@ module.exports = function(app, secret) {
             var fname = resp.first_name;
             var lname = resp.last_name;
             if (email && uid && timezone && fname && lname) {
-              User.createUser({id: uid, email: email}, provider, next, function(user) {
-                // console.log(user);
-                var response = jwt.sign(user, secret, {expiresInMinutes: expiresIn, algorithm: 'RS256'});
+              User
+                .createUser(uid, provider, email)
+                .then(function(user){
+                  var response = jwt.sign(user.toJSON(), secret, {expiresInMinutes: expiresIn, algorithm: 'RS256'});
 
-                res.send({token: response, exp: new Date((new Date()).getTime() + expiresIn*60000) });
-              });
+                  res.send({token: response, exp: new Date((new Date()).getTime() + expiresIn*60000) });
+                })
+                .catch(function(err){
+                  console.log(err);
+                  next(err);
+                });
             } else {
-              next({error: 'Got invalid credntials back from facebook.', status: 401});
+              next({error: 'Got invalid credentials back from facebook.', status: 401});
             }
           }).catch(function(e) {
             console.log(e);

@@ -3,8 +3,6 @@
 var bookshelf = require('../db');
 var checkit = require('checkit');
 
-var Settings = require('./settings');
-
 var Reminder = bookshelf.Model.extend({
   tableName: 'reminders',
   initialize: function() {
@@ -19,8 +17,8 @@ var Reminder = bookshelf.Model.extend({
   },
 
   settings: function() {
-    return this.belongsTo(Settings);
+    return this.belongsTo('Settings');
   }
 });
 
-module.exports = Reminder;
+module.exports = bookshelf.model('Reminder', Reminder);
