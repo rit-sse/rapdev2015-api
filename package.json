@@ -7,7 +7,7 @@
     "start": "node ./bin/www",
     "watch": "supervisor ./bin/www",
     "keygen": "node ./keygen.js",
-    "migrate": "knex migrate:latest --knexfile db/knexfile.js"
+    "migrate": "knex migrate:latest"
   },
   "dependencies": {
     "bluebird": "^2.7.1",
