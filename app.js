@@ -6,6 +6,8 @@ var logger = require('morgan');
 var cors = require('cors');
 var env = process.env.NODE_ENV || 'development';
 
+var identities = require('./middleware/identities');
+
 var routes = require('./routes');
 var models = require('./models');
 var jwt = require('express-jwt');
@@ -19,6 +21,7 @@ var app = express();
 
 app.use(cors());
 app.use(jwt({secret: pub}).unless({path: ['/token']}));
+app.use(identities());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -41,6 +44,7 @@ app.use(function(err, req, res, next) {
     res.status(err.status || err.statusCode || 500).send(err.message || 'internal server error!');
   }
   else {
+  	console.log(err.stack);
     res.status(err.status || err.statusCode || 500).send(err);
   }
 });

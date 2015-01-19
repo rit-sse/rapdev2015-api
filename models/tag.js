@@ -5,6 +5,7 @@ var checkit = require('checkit');
 
 var Tag = bookshelf.Model.extend({
   tableName: 'tags',
+  hasTimestamps: true,
   initialize: function() {
     this.on('saving', this.validate);
   },
@@ -13,7 +14,7 @@ var Tag = bookshelf.Model.extend({
     return checkit({
       name: 'required',
       color: 'required',
-      visibility: ['required'] //private public
+      visibility: ['required', validators.includes(['Private', 'Public'])]
     }).run(this.attributes);
   },
 

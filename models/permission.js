@@ -2,9 +2,11 @@
 
 var bookshelf = require('../db');
 var checkit = require('checkit');
+var validators = require('./validators');
 
 var Permission = bookshelf.Model.extend({
-  tableName: 'auth_methods',
+  tableName: 'permissions',
+  hasTimestamps: true,
   initialize: function() {
     this.on('saving', this.validate);
   },
@@ -12,7 +14,7 @@ var Permission = bookshelf.Model.extend({
   validate: function() {
     return checkit({
       pending: 'required',
-      type: ['required'] // in read and owner
+      type: ['required', validators.includes(['Read', 'Owner'])]
     }).run(this.attributes);
   },
 
