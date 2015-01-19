@@ -51,13 +51,78 @@ router
 
 router
   .route('/:id')
-    .get(function(req, res, next) {
-
+    .get(function(req, res, next) { //TODO: Add public tag
+      Promise.map(req.identites, function(identity) {
+        return identity.tagPermissions().then(function(permissions) {
+          return permissions;
+        }); 
+      })
+      .then(flatten)
+      .then(function(tagPermissions) {
+        return Promise.map(tagPermissions, function(permission){
+          return permission.related('subject').fetch().then(function(subject) {
+           return subject;
+          })
+        });
+      })
+      .then(flatten)
+      .then(function(tags) {
+        tags.forEach(function(tag) {
+          if(tag.id == req.body.id) {
+            res.send(tag);
+          }
+        });
+      });
+      next({status:401, message:'No access to tag'});
     })
     .put(function(req, res, next) {
+      Promise.map(req.identites, function(identity) {
+        return identity.tagPermissions().then(function(permissions) {
+          return permissions;
+        }); 
+      })
+      .then(flatten)
+      .then(function(tagPermissions) {
+        return Promise.map(tagPermissions, function(permission){
+          return permission.related('subject').fetch().then(function(subject) {
+           return subject;
+          })
+        });
+      })
+      .then(flatten)
+      .then(function(tags) {
+        tags.forEach(function(tag) {
+          if(tag.id == req.body.id) {
+            tag.save({name:req.body.name, color:req.body.color, visibility:req.body.visibility});
+          }
+        });
+      });
 
+      next({status:401, message:'No access to tag'});
     })
     .delete(function(req, res, next) {
+      Promise.map(req.identites, function(identity) {
+        return identity.tagPermissions().then(function(permissions) {
+          return permissions;
+        }); 
+      })
+      .then(flatten)
+      .then(function(tagPermissions) {
+        return Promise.map(tagPermissions, function(permission){
+          return permission.related('subject').fetch().then(function(subject) {
+           return subject;
+          })
+        });
+      })
+      .then(flatten)
+      .then(function(tags) {
+        tags.forEach(function(tag) {
+          if(tag.id == req.body.id) {
+            tag.destroy();
+          }
+        });
+      next({status:401, message:'No access to tag'});
+
     });
 
 module.exports = function(app) {
