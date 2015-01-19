@@ -26,7 +26,6 @@ var AuthMethod = bookshelf.Model.extend({
   userForAuthMethod: function(authId, type, email) {
     var am = { authId: authId, type: type };
     var User = bookshelf.model('User');
-
     return AuthMethod.where(am).fetch().then(function(auth){
       if(auth) {
         return auth.related('user').fetch();
