@@ -26,6 +26,12 @@ var Identity = bookshelf.Model.extend({
     return this.morphMany('Permission', 'subject');
   },
 
+  tagPermissions: function() {
+    return this.related('eventAndTagPermissions').fetch()
+      .then(function(tags) {
+        return tags.where({subject_type: 'tags'});
+      })
+  },
   todos: function() {
     return this.hasMany('Todo');
   },
