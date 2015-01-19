@@ -27,7 +27,10 @@ var Identity = bookshelf.Model.extend({
   },
 
   tagPermissions: function() {
-    return this.related('eventAndTagPermissions').where({subject_type:'tags'});
+    return this.related('eventAndTagPermissions').fetch()
+      .then(function(tags) {
+        return tags.where({subject_type: 'tags'});
+      })
   },
   todos: function() {
     return this.hasMany('Todo');

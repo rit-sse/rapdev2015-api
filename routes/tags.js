@@ -1,20 +1,32 @@
 var express = require('express');
 var router = express.Router();
+var Promise = require('bluebird');
+
+var flatten = function(object) {
+  return Promise.reduce(object, function(a,b) {
+    return a.concat(b);
+  }, []);
+}
 
 router
   .route('/')
     .get(function(req, res, next) {
-      var userid = req.user.id;
-      User({id:userid}).fetch({withRelated:['permissions']}).then(function(user) {
-        user.related('permissions').mapThen(function(permission) {
-          return permission.related('subject').fetch() 
-        }).mapThen(function(userIdentity) {
-          return userIdentity.tagPermissions();
-        }).mapThen(function(tagPermission) {
-          return tagPermission.related('subject').fetch();
-        }).then(function(tags) {
-          res.send(tags);
+      Promise.map(req.identites, function(identity) {
+        return identity.tagPermissions().then(function(permissions) {
+          return permissions;
+        }); 
+      })
+      .then(flatten)
+      .then(function(tagPermissions) {
+        return Promise.map(tagPermissions, function(permission){
+          return permission.related('subject').fetch().then(function(subject) {
+           return subject;
+          })
         });
+      })
+      .then(flatten)
+      .then(function(tags) {
+        res.send(tags);
       });
     })
 
@@ -40,6 +52,7 @@ router
 router
   .route('/:id')
     .get(function(req, res, next) {
+
     })
     .put(function(req, res, next) {
 
