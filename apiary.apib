@@ -110,8 +110,7 @@ A single Identity object with all its details
 
         { 
             "name": "rit-sse",
-            "singular": false,
-            "members": [1]
+            "singular": false
         }
         
 + Response 200 (application/json)
@@ -386,8 +385,8 @@ Endpoint for adding or removing tags to/from an event
             }
         }
         
-## Tagging events [/events/{id}/invitees/{iid}]
-Endpoint for adding or removing tags to/from an event
+## Event Invitees [/events/{id}/invitees/{iid}]
+Endpoint for adding or removing invitees to/from an event
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Event to perform action with. Has example value.
@@ -709,12 +708,16 @@ Resources related to tag management
             "url": "/tags/1",
             "id": 1,
             "color": "#ffffff",
-            "name": "first"
+            "name": "first",
+            "visibility":"public",
+            "identityId":1
         },{
             "url": "/tags/2",
             "id": 2,
             "color": "#ff00ff",
-            "name": "meeting"
+            "name": "meeting",
+            "visibility":"private",
+            "identityId":1
         }]
         
 ### Make a new tag [POST]
@@ -722,7 +725,9 @@ Resources related to tag management
 
         {
             "color": "#ff00ff",
-            "name": "meeting"
+            "name": "meeting",
+            "visibility":"public",
+            "identityId":1
         }
 
 + Response 200 (application/json)
@@ -731,7 +736,9 @@ Resources related to tag management
             "url": "/tags/2",
             "id": 2,
             "color": "#ff00ff",
-            "name": "meeting"
+            "name": "meeting",
+            "visibility":"public",
+            "identityId":1
         }
         
 ## Tag management [/tags/{id}]
@@ -748,7 +755,9 @@ Endpoints for managing individual tags
             "url": "/tags/1",
             "id": 1,
             "color": "#ffffff",
-            "name": "first"
+            "name": "first",
+            "visibility":"public",
+            "identityId":1
         }
         
 ### Update a tag [PUT]
@@ -756,7 +765,9 @@ Endpoints for managing individual tags
 
         {
             "color": "#ffffff",
-            "name": "first"
+            "name": "first",
+            "visibility":"public",
+            "identityId":1
         }
         
 + Response 200 (application/json)
@@ -765,7 +776,9 @@ Endpoints for managing individual tags
             "url": "/tags/1",
             "id": 1,
             "color": "#ffffff",
-            "name": "first"
+            "name": "first",
+            "visibility":"public",
+            "identityId":1
         }
         
 ### Delete a tag [DELETE]
