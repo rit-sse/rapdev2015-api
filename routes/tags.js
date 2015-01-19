@@ -124,6 +124,7 @@ router
       next({status:401, message:'No access to tag'});
 
     });
+  });
 
 module.exports = function(app) {
   app.use('/api/tags', router);
