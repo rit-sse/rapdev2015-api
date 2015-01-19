@@ -13,7 +13,7 @@ var Todo = bookshelf.Model.extend({
   validate: function() {
     return checkit({
       name: 'required',
-      completed: 'required',
+      state: 'required',
       elapsedTime: 'required'
     }).run(this.attributes);
   },
