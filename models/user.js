@@ -26,6 +26,14 @@ var User = bookshelf.Model.extend({
 
   authMethods: function() {
     return this.hasMany('AuthMethod');
+  },
+
+  events: function() {
+    this.related('identities').fetch
+  },
+
+  render: function() {
+    return this.set('url', '/users/' + this.id);
   }
 });
 

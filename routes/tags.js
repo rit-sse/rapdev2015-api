@@ -3,7 +3,7 @@ var router = express.Router();
 var Promise = require('bluebird');
 
 var flatten = function(object) {
-  return Promise.reduce(object, function(a,b) {
+  return Promise.reduce(object, function(a, b){
     return a.concat(b);
   }, []);
 }
@@ -11,16 +11,16 @@ var flatten = function(object) {
 router
   .route('/')
     .get(function(req, res, next) {
-      Promise.map(req.identites, function(identity) {
-        return identity.tagPermissions().then(function(permissions) {
+      Promise.map(req.identities, function(identity){
+        return identity.tagPermissions().then(function(permissions){
           return permissions;
-        }); 
+        });
       })
       .then(flatten)
-      .then(function(tagPermissions) {
+      .then(function(tagPermissions){
         return Promise.map(tagPermissions, function(permission){
-          return permission.related('subject').fetch().then(function(subject) {
-           return subject;
+          return permission.related('subject').fetch().then(function(subject){
+            return subject;
           })
         });
       })
@@ -55,7 +55,7 @@ router
       Promise.map(req.identites, function(identity) {
         return identity.tagPermissions().then(function(permissions) {
           return permissions;
-        }); 
+        });
       })
       .then(flatten)
       .then(function(tagPermissions) {
@@ -79,7 +79,7 @@ router
       Promise.map(req.identites, function(identity) {
         return identity.tagPermissions().then(function(permissions) {
           return permissions;
-        }); 
+        });
       })
       .then(flatten)
       .then(function(tagPermissions) {
@@ -104,7 +104,7 @@ router
       Promise.map(req.identites, function(identity) {
         return identity.tagPermissions().then(function(permissions) {
           return permissions;
-        }); 
+        });
       })
       .then(flatten)
       .then(function(tagPermissions) {
@@ -121,6 +121,7 @@ router
             tag.destroy();
           }
         });
+      });
       next({status:401, message:'No access to tag'});
 
     });

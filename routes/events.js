@@ -7,7 +7,11 @@ var Event = require('../models/event');
 router
   .route('/')
     .get(function(req, res, next) {
-      var user = req.user;
+      Event
+        .getForIdentities(req.identities)
+        .then(function(events){
+          res.send(events);
+        });
     })
     .post(function(req, res, next) {
       var user = req.user;
@@ -16,13 +20,13 @@ router
 router
   .route('/:id')
     .get(function(req, res, next) {
-  
+
     })
     .put(function(req, res, next) {
-      
+
     })
     .delete(function(req, res, next) {
-      
+
     });
 
 router

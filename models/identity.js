@@ -23,7 +23,14 @@ var Identity = bookshelf.Model.extend({
   },
 
   eventAndTagPermissions: function() {
-    return this.morphMany('Permission', 'subject');
+    return this.morphMany('Permission', 'authorizee');
+  },
+
+  eventPermissions: function() {
+    return this.related('eventAndTagPermissions').fetch()
+      .then(function(events){
+        return events.where({subject_type: 'events' });
+      })
   },
 
   tagPermissions: function() {
@@ -32,18 +39,51 @@ var Identity = bookshelf.Model.extend({
         return tags.where({subject_type: 'tags'});
       })
   },
+
   todos: function() {
     return this.hasMany('Todo');
   },
-  returnIdentity: function(identityId, cb){
-      return this
-      .set("url", "/identities/" + identityId)
-      //.then(cb);
+
+  members: function() {
+    return this
+      .related('permissions')
+      .fetch()
+      .then(function(permissions){
+        return permissions.mapThen(function(permission){
+          return permission
+            .related('authorizee')
+            .fetch()
+            .then(function(user){
+              return user;
+            });
+        })
+      });
+  },
+
+  _render: function(){
+    return {
+      id: this.id,
+      url: "/identities/" + this.id,
+      name: this.attributes.name,
+      singular: this.attributes.singular
+    }
+  },
+
+  render: function() {
+    var _this = this;
+    return this
+      .members()
+      .then(function(members){
+        return Promise.map(members, function(member){
+          return member.render();
+        })
+      })
+      .then(function(members){
+        var obj = _this._render()
+        obj.members = members;
+        return obj
+      });
   }
-
-
-
-
 },{
   createIdentity: function(name,singular,user,cb){
     return Identity

@@ -2,25 +2,8 @@
 
 var bookshelf = require('../db');
 var checkit = require('checkit');
-
-function startTimeBeforeEndTime(v, next) {
-  var start = new Date(v);
-  var end = new Date(this.endTime);
-  if(start < end) {
-    return next();
-  }
-  return next('start-time-after-end-time');
-}
-
-function isDate(v, next) {
-  if (v instanceof Date) {
-    if ( !isNaN(v.getTime()) ) {
-      return next();
-    }
-  }
-  return next('is not type Date');
-}
-
+var Promise = require('bluebird');
+var helpers = require('./helpers');
 
 var Event = bookshelf.Model.extend({
   tableName: 'events',
@@ -47,6 +30,55 @@ var Event = bookshelf.Model.extend({
 
   tags: function() {
     return this.belongsToMany('Tag');
+  },
+
+  owner: function() {
+    return this.related('permissions').fetch()
+      .then(function(permissions){
+        return permissions.findWhere({ type: 'Owner' });
+      });
+  },
+
+  render: function() {
+    return Promise.props({
+      tags: this
+        .related('tags')
+        .fetch()
+        .then(function(tags) {
+          return tags.mapThen(function(tag){
+            return tag.render();
+          });
+        }),
+      owner: this
+        .owner()
+        .then(function(owner){
+          return owner.render();
+        })
+    })
+      .then(function(result){
+        return this.set({
+          owner: result.owner,
+          tags: result.tags,
+          url: '/events/' + this.id
+        })
+      })
+  }
+}, {
+  getForIdentities: function(identities) {
+    return req.identities.mapThen(function(identity){
+      return identity.eventPermissions().then(function(permissions){
+        return permissions;
+      });
+    })
+    .then(helpers.flatten)
+    .then(function(eventPermissions){
+      return Promise.map(eventPermissions, function(permission){
+        return permission.related('subject').fetch().then(function(subject){
+          return subject;
+        })
+      });
+    })
+    .then(helpers.flatten);
   }
 });
 

@@ -28,6 +28,10 @@ var Tag = bookshelf.Model.extend({
 
   events: function() {
     return this.belongsToMany('Event');
+  },
+
+  render: function() {
+    return this.set({ url: '/tags/' + this.id });
   }
 
 });

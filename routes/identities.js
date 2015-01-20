@@ -5,16 +5,19 @@ var Permission = require('../models/permission');
 router
   .route('/')
     .get(function(req, res, next) {
-       Identity
-        .fetchAll()
-        .then(function(models){
-          res.send(models);
-        });
+      req.identities.mapThen(function(identity){
+        return identity.render();
+      }).then(function(identities){
+        res.send(identities);
+      })
     })
     .post(function(req, res, next) {
       Identity.createIdentity(req.body.name,req.body.singular, req.user)
       .then(function(result) {
-        res.send(result);
+        return result.render();
+      })
+      .then(function(identity){
+        res.send(identity)
       });
     });
 
@@ -24,13 +27,13 @@ router
       Identity
         .query({where: {id: req.params.id}})
         .fetch()
+        .then(function(result) {
+          return result.render();
+        })
         .then(function(identity){
-          identity
-            .returnIdentity(req.params.id)
-              res.send(identity);  
+          res.send(identity)
         });
       })
-    //double check stuff later
     .put(function(req, res, next) {
       Identity
         .where({id: req.params.id})
@@ -39,10 +42,12 @@ router
           singular: req.body.singular,
         })
         .save()
+        .then(function(result) {
+          return result.render();
+        })
         .then(function(identity){
           res.send(identity)
         });
-    
     })
     .delete(function(req, res, next) {
       Identity
@@ -70,9 +75,12 @@ router
             Identity
               .where({id: req.params.id})
               .fetch()
-              .then(function(identity){
-                  res.send(identity);
+              .then(function(result) {
+                return result.render();
               })
+              .then(function(identity){
+                res.send(identity)
+              });
           })
       })
       .delete(function(req, res, next){
