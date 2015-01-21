@@ -7,8 +7,14 @@ exports.up = function(knex, Promise) {
     t.datetime('dueDate');
     t.boolean('completed');
     t.integer('elapsedTime');
-    t.integer('identity_id');
-    t.integer('parent_id');
+    t.integer('identity_id')
+      .references('id')
+      .inTable('identities')
+      .index();
+    t.integer('parent_id')
+      .references('id')
+      .inTable('todos')
+      .index();
     t.timestamps();
   });
 };

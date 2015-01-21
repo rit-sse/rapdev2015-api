@@ -3,8 +3,14 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('tags_todos', function(t) {
     t.increments('id');
-    t.integer('tag_id');
-    t.integer('todo_id');
+    t.integer('tag_id')
+      .references('id')
+      .inTable('tags')
+      .index();
+    t.integer('todo_id')
+      .references('id')
+      .inTable('todos')
+      .index();
   });
 };
 

@@ -5,7 +5,10 @@ exports.up = function(knex, Promise) {
     t.increments('id');
     t.string('type');
     t.integer('minutesBefore');
-    t.integer('settings_id');
+    t.integer('settings_id')
+      .references('id')
+      .inTable('settings')
+      .index();
     t.timestamps();
   });
 };

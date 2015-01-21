@@ -5,7 +5,10 @@ exports.up = function(knex, Promise) {
     t.increments('id');
     t.string('type');
     t.string('authId');
-    t.integer('user_id');
+    t.integer('user_id')
+      .references('id')
+      .inTable('users')
+      .index();
     t.timestamps();
   });
 };

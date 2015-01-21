@@ -2,8 +2,8 @@
 
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('identities', function(t) {
-    t.increments('id');
-    t.string('name');
+    t.increments('id')
+    t.string('name').unique();
     t.boolean('singular');
     t.timestamps();
   });
