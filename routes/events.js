@@ -10,11 +10,33 @@ router
       Event
         .getForIdentities(req.identities)
         .then(function(events){
+          return events.mapThen(function(event){
+            return event.render().then(function(event){
+              return event;
+            });
+          });
+        })
+        .then(function(events){
           res.send(events);
         });
     })
     .post(function(req, res, next) {
-      var user = req.user;
+      var subject = { id: body.identity_id, tableName: 'identities'};
+      var authorizee = { id: user.id, tableName: 'users'};
+      Permission
+        .authorize({ subject: subject, authorizee: authorizee, owner: true})
+        .then(function(){
+          return Event
+            .createEvent(req.body)
+        }).then(function(event){
+          return event.render();
+        })
+        .then(function(event){
+          res.send(event);
+        })
+        .catch(function(err){
+          next(err);
+        });
     });
 
 router

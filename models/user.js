@@ -33,7 +33,7 @@ var User = bookshelf.Model.extend({
   },
 
   render: function() {
-    return this.set('url', '/users/' + this.id);
+    return this.set('url', '/users/' + this.id).pick('id', 'preferredEmail', 'url');
   }
 });
 

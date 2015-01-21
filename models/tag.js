@@ -31,9 +31,28 @@ var Tag = bookshelf.Model.extend({
   },
 
   render: function() {
-    return this.set({ url: '/tags/' + this.id });
+    return this.set({ url: '/tags/' + this.id }).pick('id', 'color', 'name', 'visibility', 'url');
   }
 
+}, {
+  findOrCreateByNameArray: function(tags, identity_id) {
+    return Promise.map(tags, function(tag){
+      return this
+        .where({ name: tag, identity_id: identity.id })
+        .then(function(tag){
+          if(tag.id) {
+            return tag;
+          } else {
+            return this
+              .forge({ name: tag, identity_id: identity.id })
+              .save()
+              .then(function(tag){
+                return tag;
+              });
+          }
+        });
+    });
+  }
 });
 
 module.exports = bookshelf.model('Tag', Tag);

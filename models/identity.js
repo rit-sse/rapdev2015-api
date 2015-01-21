@@ -61,12 +61,9 @@ var Identity = bookshelf.Model.extend({
   },
 
   _render: function(){
-    return {
-      id: this.id,
-      url: "/identities/" + this.id,
-      name: this.attributes.name,
-      singular: this.attributes.singular
-    }
+    return this
+      .set('url', '/identities/' + this.id)
+      .pick('id', 'name', 'singular', 'url');
   },
 
   render: function() {
