@@ -4,9 +4,8 @@ var Identity = require('../models/identity');
 module.exports = function() {
   return function(req, res, next) {
     if(req.user) {
-
       User
-        .where(req.user)
+        .where({id: req.user.id})
         .fetch()
         .then(function(user){
           user.related('permissions').fetch()

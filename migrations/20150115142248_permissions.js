@@ -9,6 +9,7 @@ exports.up = function(knex, Promise) {
     t.integer('subject_id');
     t.string('authorizee_type');
     t.integer('authorizee_id');
+    t.unique(['subject_type', 'subject_id', 'authorizee_type', 'authorizee_id']);
     t.timestamps();
   });
 };

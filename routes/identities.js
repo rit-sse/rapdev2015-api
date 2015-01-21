@@ -18,6 +18,9 @@ router
       })
       .then(function(identity){
         res.send(identity)
+      })
+      .catch(function(err){
+        next({status: 422, error: err});
       });
     });
 
@@ -25,28 +28,41 @@ router
   .route('/:id')
     .get(function(req, res, next) {
       Identity
-        .query({where: {id: req.params.id}})
+        .where({ id: req.params.id})
         .fetch()
         .then(function(result) {
-          return result.render();
+          if(result) {
+            return result.render();
+          } else {
+            return Promise.reject({ status: 404, message: 'Identity not found'})
+          }
         })
         .then(function(identity){
           res.send(identity)
-        });
+        })
+        .catch(function(err){
+          next(err);
+        })
       })
     .put(function(req, res, next) {
       Identity
         .where({id: req.params.id})
-        .set({
-          name: req.body.name,
-          singular: req.body.singular,
+        .fetch()
+        .then(function(identity){
+          var obj = { singular: req.body.singular};
+          if(req.body.name !== identity.get('name')) {
+            obj.name = req.body.name;
+          }
+          return identity.set(obj).save()
         })
-        .save()
         .then(function(result) {
           return result.render();
         })
         .then(function(identity){
           res.send(identity)
+        })
+        .catch(function(err){
+          next({status: 422, error: err});
         });
     })
     .delete(function(req, res, next) {
@@ -82,6 +98,9 @@ router
                 res.send(identity)
               });
           })
+          .catch(function(err){
+            next({status: 422, error: err});
+          });
       })
       .delete(function(req, res, next){
         Permission
