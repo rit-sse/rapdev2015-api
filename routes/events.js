@@ -3,6 +3,7 @@
 var express = require('express');
 var router = express.Router();
 var Event = require('../models/event');
+var Permission = require('../models/permission');
 
 router
   .route('/')
@@ -10,7 +11,7 @@ router
       Event
         .getForIdentities(req.identities)
         .then(function(events){
-          return events.mapThen(function(event){
+          return Event.collection(events).mapThen(function(event){
             return event.render().then(function(event){
               return event;
             });
@@ -21,14 +22,15 @@ router
         });
     })
     .post(function(req, res, next) {
-      var subject = { id: body.identity_id, tableName: 'identities'};
-      var authorizee = { id: user.id, tableName: 'users'};
+      var subject = { id: req.body.identity_id, tableName: 'identities'};
+      var authorizee = { id: req.user.id, tableName: 'users'};
       Permission
-        .authorize({ subject: subject, authorizee: authorizee, owner: true})
+        .authorized({ subject: subject, authorizee: authorizee, owner: true})
         .then(function(){
           return Event
             .createEvent(req.body)
         }).then(function(event){
+          console.log(event)
           return event.render();
         })
         .then(function(event){
@@ -42,7 +44,15 @@ router
 router
   .route('/:id')
     .get(function(req, res, next) {
-
+      Event
+        .where({id: req.params.id })
+        .fetch()
+        .then(function(event){
+          return event.render();
+        })
+        .then(function(event){
+          res.send(event);
+        });
     })
     .put(function(req, res, next) {
 

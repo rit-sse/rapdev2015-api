@@ -1,7 +1,7 @@
 'use strict';
 
 exports.up = function(knex, Promise) {
-  return knex.schema.createTable('events_todos', function(t) {
+  return knex.schema.createTable('events_tags', function(t) {
     t.increments('id');
     t.integer('tag_id')
       .references('id')

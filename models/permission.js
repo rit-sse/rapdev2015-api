@@ -28,16 +28,18 @@ var Permission = bookshelf.Model.extend({
   }
 }, {
   authorized: function(obj) {
-    var query = { subject_id: subject.id,
-                      subject_type: subject.tableName,
-                      authorizee_type: authorizee.tableName,
-                      authorizee_id: authorizee.id };
+    var query = { subject_id: obj.subject.id,
+                      subject_type: obj.subject.tableName,
+                      authorizee_type: obj.authorizee.tableName,
+                      authorizee_id: obj.authorizee.id };
 
     if(obj.owner) {
-      wherObj.type = 'Owner';
+      query.type = 'Owner';
     }
 
-    return this.where(query)
+    return this
+              .where(query)
+              .fetch()
               .then(function(permission){
                 if(permission.id) {
                   return Promise.resolve();

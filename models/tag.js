@@ -2,6 +2,8 @@
 
 var bookshelf = require('../db');
 var checkit = require('checkit');
+var Promise = require('bluebird');
+var validators = require('./validators');
 
 var Tag = bookshelf.Model.extend({
   tableName: 'tags',
@@ -37,14 +39,15 @@ var Tag = bookshelf.Model.extend({
 }, {
   findOrCreateByNameArray: function(tags, identity_id) {
     return Promise.map(tags, function(tag){
-      return this
-        .where({ name: tag, identity_id: identity.id })
-        .then(function(tag){
-          if(tag.id) {
-            return tag;
+      return Tag
+        .where({ name: tag, identity_id: identity_id })
+        .fetch()
+        .then(function(foundTag){
+          if(foundTag) {
+            return foundTag;
           } else {
-            return this
-              .forge({ name: tag, identity_id: identity.id })
+            return Tag
+              .forge({ name: tag, color: '#ffffff', identity_id: identity_id, visibility: 'Private' })
               .save()
               .then(function(tag){
                 return tag;

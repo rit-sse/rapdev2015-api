@@ -4,8 +4,6 @@ var bookshelf = require('../db');
 var checkit = require('checkit');
 var Promise = require('bluebird');
 var helpers = require('./helpers');
-var Tag = bookshelf.model('Tag');
-var Tag = bookshelf.model('Permission');
 
 var Event = bookshelf.Model.extend({
   tableName: 'events',
@@ -38,10 +36,14 @@ var Event = bookshelf.Model.extend({
     return this.related('permissions').fetch()
       .then(function(permissions){
         return permissions.findWhere({ type: 'Owner' });
+      })
+      .then(function(permission){
+        return permission.related('authorizee').fetch();
       });
   },
 
   render: function() {
+    var _this = this;
     return Promise.props({
       tags: this
         .related('tags')
@@ -54,14 +56,14 @@ var Event = bookshelf.Model.extend({
       owner: this
         .owner()
         .then(function(owner){
-          return owner.render();
+          return owner._render();
         })
     })
       .then(function(result){
-        return this.set({
+        return _this.set({
           owner: result.owner,
           tags: result.tags,
-          url: '/events/' + this.id
+          url: '/events/' + _this.id
         }).pick('id', 'startTime', 'endTime', 'name', 'description', 'tags', 'owner', 'url');
       })
   }
@@ -84,6 +86,9 @@ var Event = bookshelf.Model.extend({
   },
 
   createEvent: function(body) {
+    var Tag = bookshelf.model('Tag');
+    var Permission = bookshelf.model('Permission');
+
     return Event.forge({
       startTime: body.startTime,
       endTime: body.endTime,
@@ -95,13 +100,17 @@ var Event = bookshelf.Model.extend({
       return Tag
         .findOrCreateByNameArray( body.tags, body.identity_id )
         .then(function(tags){
-          return event.attach(tags).save();
+          return event.tags().attach(tags);
         })
-    }).then(function(event){
+        .then(function(){
+          return event;
+        })
+    })
+    .then(function(event){
       return Permission
         .forge({pending: false,
                 type: 'Owner',
-                authorizee_id: identity.id,
+                authorizee_id: body.identity_id,
                 authorizee_type: 'identities',
                 subject_id: event.id,
                 subject_type: 'events'
