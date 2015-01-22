@@ -25,7 +25,7 @@ router
       var subject = { id: req.body.identity_id, tableName: 'identities'};
       var authorizee = { id: req.user.id, tableName: 'users'};
       Permission
-        .authorized({ subject: subject, authorizee: authorizee, owner: true})
+        .authorized({ subject: subject, authorizees: [authorizee], owner: true})
         .then(function(){
           return Event
             .createEvent(req.body)
@@ -55,7 +55,10 @@ router
         });
     })
     .put(function(req, res, next) {
-
+      var subject;
+      var authorizee = { id: req.user.id, tableName: 'users'};
+      Event
+        .where({id: req.params.id })
     })
     .delete(function(req, res, next) {
 

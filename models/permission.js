@@ -28,25 +28,33 @@ var Permission = bookshelf.Model.extend({
   }
 }, {
   authorized: function(obj) {
-    var query = { subject_id: obj.subject.id,
+    return Promise.reduce(obj.authorizees, function(authorized, authorizee){
+      var query = { subject_id: obj.subject.id,
                       subject_type: obj.subject.tableName,
-                      authorizee_type: obj.authorizee.tableName,
-                      authorizee_id: obj.authorizee.id };
+                      authorizee_type: authorizee.tableName,
+                      authorizee_id: authorizee.id };
 
-    if(obj.owner) {
-      query.type = 'Owner';
-    }
-
-    return this
-              .where(query)
-              .fetch()
-              .then(function(permission){
-                if(permission.id) {
-                  return Promise.resolve();
-                } else {
-                  return Promise.reject({ message: 'Unauthorized', status: '401' });
-                }
-              });
+      if(obj.owner) {
+        query.type = 'Owner';
+      }
+      return Permission
+        .where(query)
+        .fetch()
+        .then(function(permission){
+          if(permission) {
+            return true;
+          } else {
+            return authorized;
+          }
+        });
+    }, false)
+    .then(function(authorized){
+      if(authorized) {
+        return Promise.resolve();
+      } else {
+        return Promise.reject({ status: 401, message: 'Unauthorized' });
+      }
+    })
   }
 });
 
