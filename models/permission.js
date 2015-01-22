@@ -55,6 +55,27 @@ var Permission = bookshelf.Model.extend({
         return Promise.reject({ status: 401, message: 'Unauthorized' });
       }
     })
+  },
+
+  authorizedFor: function(id, type) {
+    return Permission
+      .where({ subject_id: id, subject_type: type })
+      .fetchAll()
+      .then(function(permissions){
+        return permissions.mapThen(function(permission){
+          return permission
+            .related('authorizee')
+            .fetch()
+            .then(function(authorizee){
+              return authorizee
+            })
+        })
+      })
+      .then(function(authorizees){
+        var subject = { id: req.params.id, tableName: 'events'};
+        return Permission
+          .authorized({ subject: subject, authorizees: authorizees })
+      })
   }
 });
 

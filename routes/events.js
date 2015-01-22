@@ -44,18 +44,7 @@ router
   .route('/:id')
     .get(function(req, res, next) {
       Permission
-        .where({ subject_id: req.params.id, subject_type: 'events'})
-        .fetchAll()
-        .then(function(permissions){
-          return permissions.mapThen(function(permission){
-            return permission
-              .related('authorizee')
-              .fetch()
-              .then(function(authorizee){
-                return authorizee
-              })
-          })
-        })
+        .authorizedFor(req.params.id, 'events')
         .then(function(authorizees){
           var subject = { id: req.params.id, tableName: 'events'};
           return Permission
@@ -78,23 +67,7 @@ router
     })
     .put(function(req, res, next) {
       Permission
-        .where({ subject_id: req.params.id, subject_type: 'events'})
-        .fetchAll()
-        .then(function(permissions){
-          return permissions.mapThen(function(permission){
-            return permission
-              .related('authorizee')
-              .fetch()
-              .then(function(authorizee){
-                return authorizee
-              })
-          })
-        })
-        .then(function(authorizees){
-          var subject = { id: req.params.id, tableName: 'events'};
-          return Permission
-            .authorized({ subject: subject, authorizees: authorizees, owner: true })
-        })
+        .authorizedFor(req.params.id, 'events')
         .then(function(){
           return Event
             .where({id: req.params.id})
@@ -122,23 +95,7 @@ router
     })
     .delete(function(req, res, next) {
       Permission
-        .where({ subject_id: req.params.id, subject_type: 'events'})
-        .fetchAll()
-        .then(function(permissions){
-          return permissions.mapThen(function(permission){
-            return permission
-              .related('authorizee')
-              .fetch()
-              .then(function(authorizee){
-                return authorizee
-              })
-          })
-        })
-        .then(function(authorizees){
-          var subject = { id: req.params.id, tableName: 'events'};
-          return Permission
-            .authorized({ subject: subject, authorizees: authorizees, owner: true })
-        })
+        .authorizedFor(req.params.id, 'events')
         .then(function(){
           return Event
             .where({id: req.params.id})
