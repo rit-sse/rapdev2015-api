@@ -83,7 +83,6 @@ router
             .save();
         })
         .then(function(event){
-
           return event.render();
         })
         .then(function(event){
@@ -115,10 +114,56 @@ router
 router
   .route('/:id/tags/:tid')
     .put(function(req, res, next) {
-
+      Permission
+        .authorizedFor(req.params.id, 'events')
+        .then(function(){
+          return Event
+            .where({id: req.params.id})
+            .fetch()
+        })
+        .then(function(event){
+          return event
+            .owner()
+            .then(function(owner){
+              return Tag
+                .findOrCreateByNameArray([req.params.tid], owner.id)
+            })
+            .then(function(tags){
+              return event.tags().attach(tags);
+            });
+        })
+        .then(function(event){
+          return event.render();
+        })
+        .then(function(event){
+          res.send(event);
+        });
     })
     .delete(function(req, res, next) {
-
+      Permission
+        .authorizedFor(req.params.id, 'events')
+        .then(function(){
+          return Event
+            .where({id: req.params.id})
+            .fetch()
+        })
+        .then(function(event){
+          return event
+            .owner()
+            .then(function(owner){
+              return Tag
+                .findOrCreateByNameArray([req.params.tid], owner.id)
+            })
+            .then(function(tags){
+              return event.tags().detach(tags);
+            });
+        })
+        .then(function(event){
+          return event.render();
+        })
+        .then(function(event){
+          res.send(event);
+        });
     });
 
 router
