@@ -30,7 +30,6 @@ router
           return Event
             .createEvent(req.body)
         }).then(function(event){
-          console.log(event)
           return event.render();
         })
         .then(function(event){
@@ -44,21 +43,41 @@ router
 router
   .route('/:id')
     .get(function(req, res, next) {
-      Event
-        .where({id: req.params.id })
-        .fetch()
+      Permission
+        .where({ subject_id: req.params.id, subject_type: 'events'})
+        .fetchAll()
+        .then(function(permissions){
+          return permissions.mapThen(function(permission){
+            return permission
+              .related('authorizee')
+              .fetch()
+              .then(function(authorizee){
+                return authorizee
+              })
+          })
+        })
+        .then(function(authorizees){
+          var subject = { id: req.params.id, tableName: 'events'};
+          return Permission
+            .authorized({ subject: subject, authorizees: authorizees })
+        })
+        .then(function(){
+          return Event
+            .where({id: req.params.id})
+            .fetch()
+        })
         .then(function(event){
-          return event.render();
+          return event.render()
         })
         .then(function(event){
           res.send(event);
-        });
+        })
+        .catch(function(err){
+          next(err);
+        })
     })
     .put(function(req, res, next) {
-      var subject;
-      var authorizee = { id: req.user.id, tableName: 'users'};
-      Event
-        .where({id: req.params.id })
+
     })
     .delete(function(req, res, next) {
 
