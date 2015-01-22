@@ -4,6 +4,7 @@ var bookshelf = require('../db');
 var checkit = require('checkit');
 var Promise = require('bluebird');
 var validators = require('./validators');
+var helpers = require('./helpers');
 
 var Tag = bookshelf.Model.extend({
   tableName: 'tags',
@@ -38,6 +39,7 @@ var Tag = bookshelf.Model.extend({
 
 }, {
   findOrCreateByNameArray: function(tags, identity_id) {
+    var Permission = bookshelf.model('Permission');
     return Promise.map(tags, function(tag){
       return Tag
         .where({ name: tag, identity_id: identity_id })
@@ -50,11 +52,42 @@ var Tag = bookshelf.Model.extend({
               .forge({ name: tag, color: '#ffffff', identity_id: identity_id, visibility: 'Private' })
               .save()
               .then(function(tag){
+                return Permission
+                  .forge({pending: false,
+                    type: 'Owner',
+                    authorizee_id: identity_id,
+                    authorizee_type: 'identities',
+                    subject_id: tag.id,
+                    subject_type: 'tags'
+                 })
+                .save()
+                .then(function(){
+                  return tag;
+                });
+              })
+              .then(function(tag){
                 return tag;
               });
           }
         });
     });
+  },
+
+  getForIdentities: function(identities) {
+    return identities.mapThen(function(identity){
+      return identity.tagPermissions().then(function(permissions){
+        return permissions;
+      });
+    })
+    .then(helpers.flatten)
+    .then(function(tagPermissions){
+      return Promise.map(tagPermissions, function(permission){
+        return permission.related('subject').fetch().then(function(subject){
+          return subject;
+        })
+      });
+    })
+    .then(helpers.flatten);
   }
 });
 

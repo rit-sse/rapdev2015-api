@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var Promise = require('bluebird');
+var Tag = require('../models/tag')
+var Permission = require('../models/permission');
 
 var flatten = function(object) {
   return Promise.reduce(object, function(a, b){
@@ -11,42 +13,33 @@ var flatten = function(object) {
 router
   .route('/')
     .get(function(req, res, next) {
-      Promise.map(req.identities, function(identity){
-        return identity.tagPermissions().then(function(permissions){
-          return permissions;
+      Tag
+        .getForIdentities(req.identities)
+        .then(function(tags){
+          return Tag.collection(tags).mapThen(function(tag){
+            return tag.render();
+          });
+        })
+        .then(function(tags){
+          res.send(tags);
         });
-      })
-      .then(flatten)
-      .then(function(tagPermissions){
-        return Promise.map(tagPermissions, function(permission){
-          return permission.related('subject').fetch().then(function(subject){
-            return subject;
-          })
-        });
-      })
-      .then(flatten)
-      .then(function(tags) {
-        res.send(tags);
-      });
     })
 
     .post(function(req, res, next) {
-      var userid = req.user.id;
-      var identityid = req.body.identityId;
-      Identity({id:identityid}).fetch({require:true, withRelated:['permissions']}).then(function(model){
-        model.related('permissions').where({authorizee_id:userid, authorizee_type:'users'}).then(function(permission) {
-          if(permission.id) {
-            new Tag().save({name:req.body.name, color:req.body.color, visibility:req.body.visibility}).then(function(newTag) {
-              new Permission({subject_id:newTag.id, subject_type:'tags', authorizee_id:identityid, authorizee_type:'identities'}).save().then(function() {
-                res.send(newTag);
-              });
-            });
-
-          } else {
-            next(); //TODO: handle "properly"
-          }
+      var subject = { id: req.body.identity_id, tableName: 'identities'};
+      var authorizee = { id: req.user.id, tableName: 'users'};
+      Permission
+        .authorized({ subject: subject, authorizee: authorizee, owner: true})
+        .then(function(){
+          return Tag.findOrCreateByNameArray([{
+            name: req.body.name,
+            color: req.body.color,
+            visibility: req.body.visibility
+          }], req.body.identity_id)
+        })
+        .then(function(tag){
+          res.send(tag);
         });
-      });
     });
 
 router

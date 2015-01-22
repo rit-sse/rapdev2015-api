@@ -3,7 +3,7 @@ FORMAT: 1A
 # cdar
 A calendar API.
 
-All endpoints require authorization in the form of an `Authorization` header with value 
+All endpoints require authorization in the form of an `Authorization` header with value
 `Bearer <token>` where the token can be retrieved from the `/token` endpoint - which is,
 of course, exempt from this authorization requirement.
 
@@ -37,7 +37,7 @@ Resources related to the identity API
 
         [{
           "url": "/identities/1",
-          "id": 1, 
+          "id": 1,
           "name": "the-dude",
           "singular": true,
           "members": [{
@@ -47,7 +47,7 @@ Resources related to the identity API
           }]
         }, {
           "url": "/identities/2",
-          "id": 2, 
+          "id": 2,
           "name": "rit-sse",
           "singular": false,
           "members": [{
@@ -66,15 +66,15 @@ Creation of an identity assumes that the requesting user will be its first membe
 Passing `"singular": true` makes it a single-user indentity.
 + Request (application/json)
 
-        { 
+        {
             "name": "rit-sse"
         }
 
 + Response 201 (application/json)
 
-        { 
+        {
             "url": "/identities/2"
-            "id": 2, 
+            "id": 2,
             "name": "rit-sse",
             "singular": false,
             "members": [{
@@ -93,9 +93,9 @@ A single Identity object with all its details
 ### Retrieve an Identity [GET]
 + Response 200 (application/json)
 
-        { 
+        {
             "url": "/identities/2"
-            "id": 2, 
+            "id": 2,
             "name": "rit-sse",
             "singular": false,
             "members": [{
@@ -104,20 +104,20 @@ A single Identity object with all its details
                 "email": "dude@example.com"
             }]
         }
-        
+
 ### Update an Identity [PUT]
 + Request (application/json)
 
-        { 
+        {
             "name": "rit-sse",
             "singular": false
         }
-        
+
 + Response 200 (application/json)
 
-        { 
+        {
             "url": "/identities/2"
-            "id": 2, 
+            "id": 2,
             "name": "rit-sse",
             "singular": false,
             "members": [{
@@ -141,9 +141,9 @@ Facilities for adding and removing members from a non-singular identity
 ### Add a member [PUT]
 + Response 200 (application/json)
 
-        { 
+        {
             "url": "/identities/2"
-            "id": 2, 
+            "id": 2,
             "name": "rit-sse",
             "members": [{
                 "url": "/users/1",
@@ -151,13 +151,13 @@ Facilities for adding and removing members from a non-singular identity
                 "email": "dude@example.com"
             }]
         }
-        
+
 ### Remove a member [DELETE]
 + Response 200 (application/json)
 
-        { 
+        {
             "url": "/identities/2"
-            "id": 2, 
+            "id": 2,
             "name": "rit-sse",
             "members": [{
                 "url": "/users/1",
@@ -178,9 +178,9 @@ Resources related to the events API
         [{
             "url": "/events/1",
             "id": 1,
-            "start_date": "2015-01-14T20:54:49.384Z",
-            "stop_date": "2015-01-14T21:54:49.384Z",
-            "title": "SSE Meeting",
+            "startTime": "2015-01-14T20:54:49.384Z",
+            "endTime": "2015-01-14T21:54:49.384Z",
+            "name": "SSE Meeting",
             "description": "Really cool",
             "tags": [{
                 "url": "/tags/2",
@@ -201,9 +201,9 @@ Resources related to the events API
         }, {
             "url": "/events/2",
             "id": 2,
-            "start_date": "2015-02-14T20:54:49.384Z",
-            "stop_date": "2015-02-14T21:54:49.384Z",
-            "title": "SSEvents Meeting",
+            "startTime": "2015-02-14T20:54:49.384Z",
+            "endTime": "2015-02-14T21:54:49.384Z",
+            "name": "SSEvents Meeting",
             "description": "Events subcommittee meeting",
             "tags": [{
                 "url": "/tags/2",
@@ -225,11 +225,11 @@ Resources related to the events API
 
 ### Make a new event [POST]
 + Request
-    
+
         {
-            "start_date": "2015-01-14T20:54:49.384Z",
-            "stop_date": "2015-01-14T21:54:49.384Z",
-            "title": "SSE Meeting",
+            "startTime": "2015-01-14T20:54:49.384Z",
+            "endTime": "2015-01-14T21:54:49.384Z",
+            "name": "SSE Meeting",
             "description": "Really cool",
             "tags": ["meeting", "schwaggy"],
             "owner": "rit-sse"
@@ -240,9 +240,9 @@ Resources related to the events API
         {
             "url": "/events/1",
             "id": 1,
-            "start_date": "2015-01-14T20:54:49.384Z",
-            "stop_date": "2015-01-14T21:54:49.384Z",
-            "title": "SSE Meeting",
+            "startTime": "2015-01-14T20:54:49.384Z",
+            "endTime": "2015-01-14T21:54:49.384Z",
+            "name": "SSE Meeting",
             "description": "Really cool",
             "tags": [{
                 "url": "/tags/2",
@@ -259,9 +259,9 @@ Resources related to the events API
                 "url": "/identity/2",
                 "id": 2,
                 "name": "rit-sse"
-            }            
+            }
         }
-        
+
 ## Event [/events/{id}]
 Endpoint for interacting with individual events
 + Parameters
@@ -273,9 +273,9 @@ Endpoint for interacting with individual events
         {
             "url": "/events/1",
             "id": 1,
-            "start_date": "2015-01-14T20:54:49.384Z",
-            "stop_date": "2015-01-14T21:54:49.384Z",
-            "title": "SSE Meeting",
+            "startTime": "2015-01-14T20:54:49.384Z",
+            "endTime": "2015-01-14T21:54:49.384Z",
+            "name": "SSE Meeting",
             "description": "Really cool",
             "tags": [{
                 "url": "/tags/2",
@@ -294,14 +294,14 @@ Endpoint for interacting with individual events
                 "name": "rit-sse"
             }
         }
-        
+
 ### Update an event [PUT]
 + Request (application/json)
 
         {
-            "start_date": "2015-01-14T20:54:49.384Z",
-            "stop_date": "2015-01-14T21:54:49.384Z",
-            "title": "SSE Meeting",
+            "startTime": "2015-01-14T20:54:49.384Z",
+            "endTime": "2015-01-14T21:54:49.384Z",
+            "name": "SSE Meeting",
             "description": "Kinda cool",
             "tags": ["meeting"],
             "owner": "the-dude"
@@ -312,9 +312,9 @@ Endpoint for interacting with individual events
         {
             "url": "/events/1",
             "id": 1,
-            "start_date": "2015-01-14T20:54:49.384Z",
-            "stop_date": "2015-01-14T21:54:49.384Z",
-            "title": "SSE Meeting",
+            "startTime": "2015-01-14T20:54:49.384Z",
+            "endTime": "2015-01-14T21:54:49.384Z",
+            "name": "SSE Meeting",
             "description": "Kinda cool",
             "tags": [{
                 "url": "/tags/2",
@@ -328,7 +328,7 @@ Endpoint for interacting with individual events
                 "name": "the-dude"
             }
         }
-        
+
 ### Delete an event [DELETE]
 + Response 204
 
@@ -338,16 +338,16 @@ Endpoint for adding or removing tags to/from an event
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Event to perform action with. Has example value.
     + tid (required, number, `1`) ... Numeric `id` of the Tag to perform action with. Has example value.
-    
+
 ### Add a tag to an event [PUT]
 + Response 200 (application/json)
 
         {
             "url": "/events/1",
             "id": 1,
-            "start_date": "2015-01-14T20:54:49.384Z",
-            "stop_date": "2015-01-14T21:54:49.384Z",
-            "title": "SSE Meeting",
+            "startTime": "2015-01-14T20:54:49.384Z",
+            "endTime": "2015-01-14T21:54:49.384Z",
+            "name": "SSE Meeting",
             "description": "Kinda cool",
             "tags": [{
                 "url": "/tags/2",
@@ -361,16 +361,16 @@ Endpoint for adding or removing tags to/from an event
                 "name": "the-dude"
             }
         }
-        
+
 ### Remove a tag from an event [DELETE]
 + Response 200 (application/json)
 
         {
             "url": "/events/1",
             "id": 1,
-            "start_date": "2015-01-14T20:54:49.384Z",
-            "stop_date": "2015-01-14T21:54:49.384Z",
-            "title": "SSE Meeting",
+            "startTime": "2015-01-14T20:54:49.384Z",
+            "endTime": "2015-01-14T21:54:49.384Z",
+            "name": "SSE Meeting",
             "description": "Kinda cool",
             "tags": [{
                 "url": "/tags/2",
@@ -384,14 +384,14 @@ Endpoint for adding or removing tags to/from an event
                 "name": "the-dude"
             }
         }
-        
+
 ## Event Invitees [/events/{id}/invitees/{iid}]
 Endpoint for adding or removing invitees to/from an event
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Event to perform action with. Has example value.
     + iid (required, number, `1`) ... Numeric `id` of the Identity to perform action with. Has example value.
-    
+
 ### Add an invitee to an event [PUT]
 + Response 204
 
@@ -408,11 +408,11 @@ Endpoint for adding or removing invitees to/from an event
 + Response 204
 
 ## Event reminders [/events/{id}/reminders]
-Endpoint for adding or retreiving event reminders 
+Endpoint for adding or retreiving event reminders
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Event to perform action with. Has example value.
-    
+
 
 ### Get all reminders on an event [GET]
 + Response 200 (application/json)
@@ -441,13 +441,13 @@ Endpoint for adding or retreiving event reminders
 
         {
             "url": "/events/1/reminders/1",
-            "id": 1,        
+            "id": 1,
             "minutes_before": 30,
             "type": "email"
         }
-        
+
 ## Event reminder management [/events/{id}/reminders/{rid}]
-Endpoints for editing or removing event reminders 
+Endpoints for editing or removing event reminders
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Event to perform action with. Has example value.
@@ -461,16 +461,16 @@ Endpoints for editing or removing event reminders
             "minutes_before": 300,
             "type": "email"
         }
-        
+
 + Response 200 (application/json)
 
         {
             "url": "/events/1/reminders/1",
-            "id": 1,        
+            "id": 1,
             "minutes_before": 300,
             "type": "email"
         }
-        
+
 ### Remove a reminder [DELETE]
 + Response 204
 
@@ -527,7 +527,7 @@ Resources related to the todo api
             "tags": ["api"],
             "owner": "the-dude"
         }
-        
+
 + Response 200 (application/json)
 
         {
@@ -548,13 +548,13 @@ Resources related to the todo api
                 "name": "the-dude"
             }
         }
-        
+
 ## Todo [/todos/{id}]
 Endpoints for managing todos
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Event to perform action with. Has example value.
-    
+
 
 ### Get an individual todo [GET]
 + Response 200 (application/json)
@@ -609,7 +609,7 @@ Endpoints for managing todos
                 "name": "the-dude"
             }
         }
-        
+
 ### Delete a todo [DELETE]
 + Response 204
 
@@ -646,7 +646,7 @@ Endpoints for adding and removing tags from a todo
                 "name": "the-dude"
             }
         }
-        
+
 ### Remove a tag from a todo [DELETE]
 + Response 200 (application/json)
 
@@ -668,10 +668,10 @@ Endpoints for adding and removing tags from a todo
                 "name": "the-dude"
             }
         }
-        
+
 
 ## Todo reminder management [/todos/{id}/reminders/{rid}]
-Endpoints for editing or removing todo reminders 
+Endpoints for editing or removing todo reminders
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Todo to perform action with. Has example value.
@@ -685,16 +685,16 @@ Endpoints for editing or removing todo reminders
             "minutes_before": 300,
             "type": "email"
         }
-        
+
 + Response 200 (application/json)
 
         {
             "url": "/todos/1/reminders/1",
-            "id": 1,        
+            "id": 1,
             "minutes_before": 300,
             "type": "email"
         }
-        
+
 ### Remove a reminder [DELETE]
 + Response 204
 
@@ -719,7 +719,7 @@ Resources related to tag management
             "visibility":"private",
             "identityId":1
         }]
-        
+
 ### Make a new tag [POST]
 + Request (application/json)
 
@@ -740,7 +740,7 @@ Resources related to tag management
             "visibility":"public",
             "identityId":1
         }
-        
+
 ## Tag management [/tags/{id}]
 Endpoints for managing individual tags
 
@@ -759,7 +759,7 @@ Endpoints for managing individual tags
             "visibility":"public",
             "identityId":1
         }
-        
+
 ### Update a tag [PUT]
 + Request (application/json)
 
@@ -769,7 +769,7 @@ Endpoints for managing individual tags
             "visibility":"public",
             "identityId":1
         }
-        
+
 + Response 200 (application/json)
 
         {
@@ -780,7 +780,7 @@ Endpoints for managing individual tags
             "visibility":"public",
             "identityId":1
         }
-        
+
 ### Delete a tag [DELETE]
 + Response 204
 
@@ -789,14 +789,14 @@ Endpoint for finding all subscribers to a tag
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Tag to perform action with. Has example value.
-    
+
 
 ### Find all subscribers [GET]
 + Response 200 (application/json)
 
         [{
           "url": "/identities/1",
-          "id": 1, 
+          "id": 1,
           "name": "the-dude",
           "singular": true,
           "members": [{
@@ -806,7 +806,7 @@ Endpoint for finding all subscribers to a tag
           }]
         }, {
           "url": "/identities/2",
-          "id": 2, 
+          "id": 2,
           "name": "rit-sse",
           "singular": false,
           "members": [{
@@ -826,7 +826,7 @@ Endpoints for managing tag subscriptions
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Tag to perform action with. Has example value.
     + iid (required, number, `1`) ... Numeric `id` of the Identity to perform action with. Has example value.
-   
+
 
 ### Add a subscriber [PUT]
 + Response 204
@@ -840,7 +840,7 @@ Endpoints for finding information about users
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the User to perform action with. Has example value.
-    
+
 
 ### Find a user [GET]
 + Response 200 (application/json)
@@ -850,14 +850,14 @@ Endpoints for finding information about users
             "id": 1,
             "email": "dude@example.com"
         }
-        
+
 ### Update a user [PUT]
 + Request (application/json)
 
         {
             "email": "the-dude@example.net"
         }
-        
+
 + Response 200 (application/json)
 
         {
@@ -865,7 +865,7 @@ Endpoints for finding information about users
             "id": 1,
             "email": "the-dude@example.net"
         }
-        
+
 # Group Auth
 User authentication endpoint(s)
 ## Token requests [/token?provider={provider}&token={token}]
