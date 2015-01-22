@@ -169,10 +169,47 @@ router
 router
   .route('/:id/invitees/:iid')
     .put(function(req, res, next) {
-
+      Permission
+        .authorizedFor(req.params.id, 'events')
+        .then(function(){
+          return Event
+            .where({id: req.params.id})
+            .fetch()
+        })
+        .then(function(event){
+          return Permission
+            .forge({pending: true,
+                    type: 'Read',
+                    authorizee_id: req.params.iid,
+                    authorizee_type: 'identities',
+                    subject_id: event.id,
+                    subject_type: 'events'
+                  })
+            .save();
+        })
+        .then(function(){
+          res.status(204).send({});
+        })
     })
     .delete(function(req, res, next) {
-
+      Permission
+        .authorizedFor(req.params.id, 'events')
+        .then(function(){
+          return Permission
+            .where({
+                    authorizee_id: req.params.iid,
+                    authorizee_type: 'identities',
+                    subject_id: event.id,
+                    subject_type: 'events'
+                  })
+            .fetch()
+        })
+        .then(function(permission){
+          permission.destroy();
+        })
+        .then(function(){
+          res.status(204).send({});
+        });
     })
     .patch(function(req, res, next) {
 
